@@ -1,23 +1,23 @@
 //
-//  MovieObject.m
+//  Decoder.m
 //  PlayerTest
 //
-//  Created by baiyang on 2018/2/27.
+//  Created by 玉洋 on 2018/9/14.
 //  Copyright © 2018年 baiyang. All rights reserved.
 //
 
-#import "MovieObject.h"
+#import "Decoder.h"
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
 
-@interface MovieObject ()
+@interface Decoder ()
 
 @property (nonatomic, copy) NSString *cruutenPath;
 
 @end
 
-@implementation MovieObject
+@implementation Decoder
 {
     AVFormatContext     *_formatCtx;
     AVCodecContext      *_codecCtx;
@@ -145,11 +145,6 @@ initError:
     if (_outputHeight == newValue) return;
     _outputHeight = newValue;
 }
--(UIImage *)currentImage {
-    if (!_frame->data[0]) return nil;
-    return nil;
-//    return [self imageFromAVPicture:nil width:nil height:nil];
-}
 -(double)duration {
     return (double)_formatCtx->duration / AV_TIME_BASE;
 }
@@ -179,7 +174,7 @@ initError:
                                                        NULL,
                                                        NULL,
                                                        NULL);
-//    if(imgConvertCtx == nil) return nil;
+    //    if(imgConvertCtx == nil) return nil;
     sws_scale(imgConvertCtx,
               _frame->data,
               _frame->linesize,
@@ -189,7 +184,7 @@ initError:
               _picture.linesize);
     sws_freeContext(imgConvertCtx);
     
-//    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
+    //    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
     CFDataRef data = CFDataCreate(kCFAllocatorDefault,
                                   _picture.data[0],
                                   _picture.linesize[0] * _outputHeight);
@@ -198,27 +193,6 @@ initError:
     *outData = my_nsdata;
     *width = _outputWidth;
     *height = _outputHeight;
-    
-//    CGDataProviderRef provider = CGDataProviderCreateWithCFData(data);
-//    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-//    CGImageRef cgImage = CGImageCreate(_outputWidth,
-//                                       _outputHeight,
-//                                       8,
-//                                       24,
-//                                       _picture.linesize[0],
-//                                       colorSpace,
-//                                       bitmapInfo,
-//                                       provider,
-//                                       NULL,
-//                                       NO,
-//                                       kCGRenderingIntentDefault);
-//    UIImage *image = [UIImage imageWithCGImage:cgImage];
-//    CGImageRelease(cgImage);
-//    CGColorSpaceRelease(colorSpace);
-//    CGDataProviderRelease(provider);
-//    CFRelease(data);
-    
-//    return image;
 }
 
 #pragma mark --------------------------

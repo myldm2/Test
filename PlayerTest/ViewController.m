@@ -11,6 +11,7 @@
 #import "MovieObject.h"
 #import "TextureOneViewController.h"
 #import "TestOne.h"
+#import "Decoder.h"
 
 #define LERP(A,B,C) ((A)*(1.0-C)+(B)*C)
 
@@ -20,7 +21,7 @@
 
 @property (nonatomic, strong) UIButton* playBtn;
 @property (nonatomic, strong) UIButton* timerBtn;
-@property (nonatomic, strong) MovieObject *video;
+@property (nonatomic, strong) Decoder *video;
 @property (nonatomic, assign) float lastFrameTime;
 @property (nonatomic, strong) UIImageView* imageView;
 
@@ -49,7 +50,7 @@
     NSURL* url = [NSURL fileURLWithPath:path];
 
     //播放网络视频
-    MovieObject *extractedExpr = [[MovieObject alloc] initWithVideo:url.absoluteString];
+    Decoder *extractedExpr = [[Decoder alloc] initWithVideo:url.absoluteString];
     self.video = extractedExpr;
 
     CGFloat pw = 50;

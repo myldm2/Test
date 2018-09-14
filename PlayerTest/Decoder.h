@@ -1,18 +1,15 @@
 //
-//  MovieObject.h
+//  Decoder.h
 //  PlayerTest
 //
-//  Created by baiyang on 2018/2/27.
+//  Created by 玉洋 on 2018/9/14.
 //  Copyright © 2018年 baiyang. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface MovieObject : NSObject
-
-/* 解码后的UIImage */
-@property (nonatomic, strong, readonly) UIImage *currentImage;
+@interface Decoder : NSObject
 
 /* 视频的frame高度 */
 @property (nonatomic, assign, readonly) int sourceWidth, sourceHeight;

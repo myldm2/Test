@@ -42,6 +42,7 @@
 		B686251120454A5700FE7C9D /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B686251020454A5700FE7C9D /* libiconv.tbd */; };
 		B6B3EABF204FBA810050C67E /* TestOne.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B3EABE204FBA810050C67E /* TestOne.m */; };
 		B6B3EAC1204FBBDE0050C67E /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B6B3EAC0204FBBDE0050C67E /* test.mp4 */; };
+		B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B73A48C3214B8E4E006A8EF9 /* Decoder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -198,6 +199,8 @@
 		B6B3EABD204FBA810050C67E /* TestOne.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOne.h; sourceTree = "<group>"; };
 		B6B3EABE204FBA810050C67E /* TestOne.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestOne.m; sourceTree = "<group>"; };
 		B6B3EAC0204FBBDE0050C67E /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
+		B73A48C2214B8E4E006A8EF9 /* Decoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
+		B73A48C3214B8E4E006A8EF9 /* Decoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Decoder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +279,8 @@
 				B67C3483205121F40044DFF1 /* TestMovie.m */,
 				B6B3EABD204FBA810050C67E /* TestOne.h */,
 				B6B3EABE204FBA810050C67E /* TestOne.m */,
+				B73A48C2214B8E4E006A8EF9 /* Decoder.h */,
+				B73A48C3214B8E4E006A8EF9 /* Decoder.m */,
 				B68624732044F97F00FE7C9D /* testImage.png */,
 				B68624602044E64200FE7C9D /* Main.storyboard */,
 				B68624632044E64200FE7C9D /* Assets.xcassets */,
@@ -582,6 +587,7 @@
 				B686245F2044E64200FE7C9D /* ViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
 				B686246A2044E64200FE7C9D /* main.m in Sources */,
+				B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */,
 				B6B3EABF204FBA810050C67E /* TestOne.m in Sources */,
 				B67C3484205121F40044DFF1 /* TestMovie.m in Sources */,
 				B686245C2044E64200FE7C9D /* AppDelegate.m in Sources */,
