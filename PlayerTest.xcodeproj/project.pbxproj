@@ -43,6 +43,8 @@
 		B6B3EABF204FBA810050C67E /* TestOne.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B3EABE204FBA810050C67E /* TestOne.m */; };
 		B6B3EAC1204FBBDE0050C67E /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B6B3EAC0204FBBDE0050C67E /* test.mp4 */; };
 		B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B73A48C3214B8E4E006A8EF9 /* Decoder.m */; };
+		B77BF067214F732900BFF176 /* MAAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B77BF066214F732900BFF176 /* MAAudioPlayer.m */; };
+		B77BF06A214F887B00BFF176 /* MAAudioSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B77BF069214F887B00BFF176 /* MAAudioSession.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -201,6 +203,10 @@
 		B6B3EAC0204FBBDE0050C67E /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
 		B73A48C2214B8E4E006A8EF9 /* Decoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
 		B73A48C3214B8E4E006A8EF9 /* Decoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Decoder.m; sourceTree = "<group>"; };
+		B77BF065214F732900BFF176 /* MAAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioPlayer.h; sourceTree = "<group>"; };
+		B77BF066214F732900BFF176 /* MAAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAAudioPlayer.m; sourceTree = "<group>"; };
+		B77BF068214F887B00BFF176 /* MAAudioSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioSession.h; sourceTree = "<group>"; };
+		B77BF069214F887B00BFF176 /* MAAudioSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAAudioSession.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +274,7 @@
 		B68624592044E64200FE7C9D /* PlayerTest */ = {
 			isa = PBXGroup;
 			children = (
+				B77BF064214F730200BFF176 /* AudioPlayer */,
 				B68320AF20467CEC00997396 /* Player */,
 				B686245A2044E64200FE7C9D /* AppDelegate.h */,
 				B686245B2044E64200FE7C9D /* AppDelegate.m */,
@@ -504,6 +511,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B77BF064214F730200BFF176 /* AudioPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				B77BF065214F732900BFF176 /* MAAudioPlayer.h */,
+				B77BF066214F732900BFF176 /* MAAudioPlayer.m */,
+				B77BF068214F887B00BFF176 /* MAAudioSession.h */,
+				B77BF069214F887B00BFF176 /* MAAudioSession.m */,
+			);
+			path = AudioPlayer;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -586,9 +604,11 @@
 				B68320BA2046808E00997396 /* TextureOneViewController.m in Sources */,
 				B686245F2044E64200FE7C9D /* ViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
+				B77BF06A214F887B00BFF176 /* MAAudioSession.m in Sources */,
 				B686246A2044E64200FE7C9D /* main.m in Sources */,
 				B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */,
 				B6B3EABF204FBA810050C67E /* TestOne.m in Sources */,
+				B77BF067214F732900BFF176 /* MAAudioPlayer.m in Sources */,
 				B67C3484205121F40044DFF1 /* TestMovie.m in Sources */,
 				B686245C2044E64200FE7C9D /* AppDelegate.m in Sources */,
 			);
