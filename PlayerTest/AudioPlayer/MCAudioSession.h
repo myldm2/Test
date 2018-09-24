@@ -1,17 +1,18 @@
 //
-//  AudioSession.h
+//  MCAudionSession.h
 //  PlayerTest
 //
-//  Created by 玉洋 on 2018/9/17.
+//  Created by myldm2 on 2018/9/24.
 //  Copyright © 2018年 baiyang. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import <AVFoundation/AVFoundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 /* route change notification  */
-FOUNDATION_EXPORT NSString *const MAAudioSessionRouteChangeNotification;
+FOUNDATION_EXPORT NSString *const MCAudioSessionRouteChangeNotification;
 /* a NSNumber of SInt32
  enum {
  kAudioSessionRouteChangeReason_Unknown = 0,
@@ -24,18 +25,18 @@ FOUNDATION_EXPORT NSString *const MAAudioSessionRouteChangeNotification;
  kAudioSessionRouteChangeReason_RouteConfigurationChange = 8
  };
  */
-FOUNDATION_EXPORT NSString *const MAAudioSessionRouteChangeReason;
+FOUNDATION_EXPORT NSString *const MCAudioSessionRouteChangeReason;
 
 /* interrupt notification */
-FOUNDATION_EXPORT NSString *const MAAudioSessionInterruptionNotification;
+FOUNDATION_EXPORT NSString *const MCAudioSessionInterruptionNotification;
 /* a NSNumber of kAudioSessionBeginInterruption or kAudioSessionEndInterruption */
-FOUNDATION_EXPORT NSString *const MAAudioSessionInterruptionStateKey;
+FOUNDATION_EXPORT NSString *const MCAudioSessionInterruptionStateKey;
 /* Only present for kAudioSessionEndInterruption. a NSNumber of AudioSessionInterruptionType.*/
-FOUNDATION_EXPORT NSString *const MAAudioSessionInterruptionTypeKey;
+FOUNDATION_EXPORT NSString *const MCAudioSessionInterruptionTypeKey;
 
-@interface MAAudioSession : NSObject
+@interface MCAudioSession : NSObject
 
-+ (MAAudioSession*)sharedInstance;
++ (id)sharedInstance;
 
 - (BOOL)setActive:(BOOL)active error:(NSError **)outError;
 /**
@@ -59,8 +60,11 @@ FOUNDATION_EXPORT NSString *const MAAudioSessionInterruptionTypeKey;
  */
 - (BOOL)setCategory:(UInt32)category error:(NSError **)outError;
 
+- (BOOL)setProperty:(AudioSessionPropertyID)propertyID dataSize:(UInt32)dataSize data:(const void *)data error:(NSError **)outError;
 
-//+ (BOOL)usingHeadset;
-//+ (BOOL)isAirplayActived;
++ (BOOL)usingHeadset;
++ (BOOL)isAirplayActived;
 
 @end
+
+NS_ASSUME_NONNULL_END
