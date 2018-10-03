@@ -9,7 +9,7 @@
 #import "MCAudioFile.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-
+static const UInt32 packetPerRead = 15;
 
 @interface MCAudioFile()
 {
@@ -36,12 +36,21 @@
         _fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:_filePath error:nil] fileSize];
         if (_fileHandler && _fileSize > 0)
         {
-//            if ([self ])
+            if ([self _openAudioFile])
+            {
+                [self _fetchFormatInfo];
+            }
         } else {
             [_fileHandler closeFile];
         }
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [_fileHandler closeFile];
+    [self _closeAudioFile];
 }
 
 #pragma mark - audiofile
@@ -64,11 +73,19 @@
     }
 }
 
-- (void)_calculateDuration
+- (void)_calculatePacketDuration
 {
     if (_format.mSampleRate > 0)
     {
         _packetDuration = _format.mFramesPerPacket / _format.mSampleRate;
+    }
+}
+
+- (void)_calculateDuration
+{
+    if (_fileSize > 0 && _bitRate > 0)
+    {
+        _duration = ((_fileSize - _dataOffset) * 8) / _bitRate;
     }
 }
 
@@ -150,12 +167,130 @@
             [self _closeAudioFile];
             return;
         } else {
-            [self _calculateDuration];
+            [self _calculatePacketDuration];
+        }
+        
+    }
+    
+    UInt32 size = sizeof(_bitRate);
+    status = AudioFileGetProperty(_audioFileID, kAudioFilePropertyBitRate, &size, &_bitRate);
+    if (status != noErr) {
+        [self _closeAudioFile];
+        return;
+    }
+    
+    size = sizeof(_dataOffset);
+    status = AudioFileGetProperty(_audioFileID, kAudioFilePropertyDataOffset, &size, &_dataOffset);
+    if (status != noErr)
+    {
+        [self _closeAudioFile];
+        return;
+    }
+    _audioDataByteCount = _fileSize - _dataOffset;
+    
+    size = sizeof(_duration);
+    status = AudioFileGetProperty(_audioFileID, kAudioFilePropertyEstimatedDuration, &size, &_duration);
+    if (status != noErr)
+    {
+        [self _calculateDuration];
+    }
+    
+    size = sizeof(_maxPacketSize);
+    status = AudioFileGetProperty(_audioFileID, kAudioFilePropertyPacketSizeUpperBound, &size, &_duration);
+    if (status != noErr || _maxPacketSize == 0)
+    {
+        status = AudioFileGetProperty(_audioFileID, kAudioFilePropertyMaximumPacketSize, &size, &_maxPacketSize);
+        if (status != noErr)
+        {
+            [self _closeAudioFile];
+            return;
         }
     }
     
-    //TODO:
+}
+
+- (NSData *)fetchMagicCookie
+{
+    UInt32 cookieSize;
+    OSStatus status = AudioFileGetPropertyInfo(_audioFileID, kAudioFilePropertyMagicCookieData, &cookieSize, NULL);
+    if (status != noErr)
+    {
+        return nil;
+    }
     
+    void *cookieData = malloc(cookieSize);
+    status = AudioFileGetProperty(_audioFileID, kAudioFilePropertyMagicCookieData, &cookieSize, cookieData);
+    if (status != noErr)
+    {
+        free(cookieData);
+        return nil;
+    }
+    NSData *cookie = [NSData dataWithBytes:cookieData length:cookieSize];
+    free(cookieData);
+    
+    return cookie;
+}
+
+- (NSArray *)parseData:(BOOL *)isEof
+{
+    UInt32 ioNumPackets = packetPerRead;
+    UInt32 ioNumBytes = ioNumPackets * _maxPacketSize;
+    void * outBuffer = (void *)malloc(ioNumBytes);
+    
+    AudioStreamPacketDescription* outPacketDescriptions = NULL;
+    OSStatus status = noErr;
+    if (_format.mFormatID != kAudioFormatLinearPCM)
+    {
+        UInt32 descSize = sizeof(AudioStreamPacketDescription) * ioNumPackets;
+        outPacketDescriptions = (AudioStreamPacketDescription *)malloc(descSize);
+        status = AudioFileReadPacketData(_audioFileID, false, &ioNumBytes, outPacketDescriptions, _packetOffset, &ioNumPackets, outBuffer);
+    } else
+    {
+        status = AudioFileReadPackets(_audioFileID, false, &ioNumBytes, outPacketDescriptions, _packetOffset, &ioNumPackets, outBuffer);
+    }
+    
+    if (status != noErr)
+    {
+        *isEof = status == kAudioFileEndOfFileError;
+        free(outBuffer);
+        return nil;
+    }
+    
+    if (ioNumBytes == 0)
+    {
+        *isEof = YES;
+    }
+    
+    _packetOffset += ioNumPackets;
+    
+    if (ioNumPackets > 0)
+    {
+        NSMutableArray* parsedDataArray = [[NSMutableArray alloc] init];
+        for (int i = 0; i < ioNumPackets; ++ i) {
+            AudioStreamPacketDescription packetDescription;
+            if (outPacketDescriptions) {
+                packetDescription = outPacketDescriptions[i];
+            } else {
+                packetDescription.mStartOffset = i * _format.mBytesPerPacket;
+                packetDescription.mDataByteSize = _format.mBytesPerPacket;
+                packetDescription.mVariableFramesInPacket = _format.mFramesPerPacket;
+            }
+            MCParsedAudioData* parsedData = [MCParsedAudioData parsedAudioDataWithBytes:outBuffer + packetDescription.mStartOffset packetDescription:packetDescription];
+            if (parsedData)
+            {
+                [parsedDataArray addObject:parsedData];
+            }
+        }
+        return parsedDataArray;
+    }
+    
+    return nil;
+    
+}
+
+- (BOOL)available
+{
+    return _audioFileID != NULL;
 }
 
 static OSStatus MCAudioFileReadCallBack(void *inClientData, SInt64 inPosition, UInt32 requestCount, void *buffer, UInt32 *actualCount)
