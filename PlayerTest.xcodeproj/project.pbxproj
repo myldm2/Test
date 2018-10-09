@@ -45,6 +45,10 @@
 		B6B3EAC1204FBBDE0050C67E /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B6B3EAC0204FBBDE0050C67E /* test.mp4 */; };
 		B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B73A48C3214B8E4E006A8EF9 /* Decoder.m */; };
 		B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */; };
+		B7CC2A972165F5B300FEDD67 /* MCAudioOutputQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A962165F5B300FEDD67 /* MCAudioOutputQueue.m */; };
+		B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A992166420900FEDD67 /* MCAudioBuffer.m */; };
+		B7CC2A9D2166525200FEDD67 /* NSTimer+BlocksSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9B2166525100FEDD67 /* NSTimer+BlocksSupport.m */; };
+		B7CC2AA0216652AB00FEDD67 /* MCSimpleAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9F216652AB00FEDD67 /* MCSimpleAudioPlayer.m */; };
 		B7D32AFF21605C5600E55325 /* MCAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D32AFE21605C5600E55325 /* MCAudioFile.m */; };
 /* End PBXBuildFile section */
 
@@ -209,6 +213,14 @@
 		B73A48C3214B8E4E006A8EF9 /* Decoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Decoder.m; sourceTree = "<group>"; };
 		B7CC2A9221636E4E00FEDD67 /* MCAudioFileStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioFileStream.h; sourceTree = "<group>"; };
 		B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAudioFileStream.m; sourceTree = "<group>"; };
+		B7CC2A952165F5B300FEDD67 /* MCAudioOutputQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioOutputQueue.h; sourceTree = "<group>"; };
+		B7CC2A962165F5B300FEDD67 /* MCAudioOutputQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAudioOutputQueue.m; sourceTree = "<group>"; };
+		B7CC2A982166420900FEDD67 /* MCAudioBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioBuffer.h; sourceTree = "<group>"; };
+		B7CC2A992166420900FEDD67 /* MCAudioBuffer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAudioBuffer.m; sourceTree = "<group>"; };
+		B7CC2A9B2166525100FEDD67 /* NSTimer+BlocksSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+BlocksSupport.m"; sourceTree = "<group>"; };
+		B7CC2A9C2166525100FEDD67 /* NSTimer+BlocksSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+BlocksSupport.h"; sourceTree = "<group>"; };
+		B7CC2A9E216652AB00FEDD67 /* MCSimpleAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCSimpleAudioPlayer.h; sourceTree = "<group>"; };
+		B7CC2A9F216652AB00FEDD67 /* MCSimpleAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCSimpleAudioPlayer.m; sourceTree = "<group>"; };
 		B7D32AFD21605C5600E55325 /* MCAudioFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioFile.h; sourceTree = "<group>"; };
 		B7D32AFE21605C5600E55325 /* MCAudioFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAudioFile.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -525,6 +537,14 @@
 				B7D32AFE21605C5600E55325 /* MCAudioFile.m */,
 				B7CC2A9221636E4E00FEDD67 /* MCAudioFileStream.h */,
 				B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */,
+				B7CC2A952165F5B300FEDD67 /* MCAudioOutputQueue.h */,
+				B7CC2A962165F5B300FEDD67 /* MCAudioOutputQueue.m */,
+				B7CC2A982166420900FEDD67 /* MCAudioBuffer.h */,
+				B7CC2A992166420900FEDD67 /* MCAudioBuffer.m */,
+				B7CC2A9E216652AB00FEDD67 /* MCSimpleAudioPlayer.h */,
+				B7CC2A9F216652AB00FEDD67 /* MCSimpleAudioPlayer.m */,
+				B7CC2A9C2166525100FEDD67 /* NSTimer+BlocksSupport.h */,
+				B7CC2A9B2166525100FEDD67 /* NSTimer+BlocksSupport.m */,
 			);
 			path = AudioPlayer;
 			sourceTree = "<group>";
@@ -612,14 +632,18 @@
 				B68320BA2046808E00997396 /* TextureOneViewController.m in Sources */,
 				B686245F2044E64200FE7C9D /* ViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
+				B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */,
 				B686246A2044E64200FE7C9D /* main.m in Sources */,
 				5A432C132158D5F100928592 /* MCParsedAudioData.m in Sources */,
+				B7CC2A972165F5B300FEDD67 /* MCAudioOutputQueue.m in Sources */,
 				B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */,
+				B7CC2A9D2166525200FEDD67 /* NSTimer+BlocksSupport.m in Sources */,
 				B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */,
 				B7D32AFF21605C5600E55325 /* MCAudioFile.m in Sources */,
 				B6B3EABF204FBA810050C67E /* TestOne.m in Sources */,
 				B67C3484205121F40044DFF1 /* TestMovie.m in Sources */,
 				B686245C2044E64200FE7C9D /* AppDelegate.m in Sources */,
+				B7CC2AA0216652AB00FEDD67 /* MCSimpleAudioPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

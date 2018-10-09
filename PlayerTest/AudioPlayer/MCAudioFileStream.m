@@ -44,10 +44,10 @@ static void MCAudioFileStreamPacketsCallBack(void *inClientData,
                                              AudioStreamPacketDescription *inPacketDescriptions)
 {
     MCAudioFileStream *audioFileStream = (__bridge MCAudioFileStream *)inClientData;
-//    [audioFileStream handleAudioFileStreamPackets:inInputData
-//                                    numberOfBytes:inNumberBytes
-//                                  numberOfPackets:inNumberPackets
-//                               packetDescriptions:inPacketDescriptions];
+    [audioFileStream handleAudioFileStreamPackets:inInputData
+                                    numberOfBytes:inNumberBytes
+                                  numberOfPackets:inNumberPackets
+                               packetDescriptions:inPacketDescriptions];
 }
 
 - (instancetype)initWithFileType:(AudioFileTypeID)fileType fileSize:(unsigned long long)fileSize error:(NSError * _Nullable __autoreleasing *)error
@@ -60,6 +60,11 @@ static void MCAudioFileStreamPacketsCallBack(void *inClientData,
         
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [self _closeAudioFileStream];
 }
 
 - (BOOL)_openAudioFileStreamWithFileTypeHint:(AudioFileTypeID)fileTypeHint error:(NSError* __autoreleasing *)error
@@ -149,6 +154,39 @@ static void MCAudioFileStreamPacketsCallBack(void *inClientData,
     }
 }
 
+- (BOOL)parseData:(NSData *)data error:(NSError **)error
+{
+    if (self.readyToProducePackets && _packetDuration == 0)
+    {
+        [self _errorForOSStatus:-1 error:error];
+        return NO;
+    }
+    OSStatus status = AudioFileStreamParseBytes(_audioFileStreamID,(UInt32)[data length],[data bytes],_discontinuous ? kAudioFileStreamParseFlag_Discontinuity : 0);
+    [self _errorForOSStatus:status error:error];
+    return status == noErr;
+}
+
+- (SInt64)seekToTime:(NSTimeInterval *)time
+{
+    SInt64 approximateSeekOffset = _dataOffset + (*time / _duration) * _audioDataByteCount;
+    SInt64 seekToPacket = floor(*time / _packetDuration);
+    SInt64 seekByteOffset;
+    UInt32 ioFlags = 0;
+    SInt64 outDataByteOffset;
+    OSStatus status = AudioFileStreamSeek(_audioFileStreamID, seekToPacket, &outDataByteOffset, &ioFlags);
+    if (status == noErr && !(ioFlags & kAudioFileStreamSeekFlag_OffsetIsEstimated))
+    {
+        *time -= ((approximateSeekOffset - _dataOffset) - outDataByteOffset) * 8.0 / _bitRate;
+        seekByteOffset = outDataByteOffset + _dataOffset;
+    }
+    else
+    {
+        _discontinuous = YES;
+        seekByteOffset = approximateSeekOffset;
+    }
+    return seekByteOffset;
+}
+
 - (void)calculateDuration
 {
     if (_fileSize > 0 && _bitRate > 0)
@@ -165,6 +203,15 @@ static void MCAudioFileStreamPacketsCallBack(void *inClientData,
     }
 }
 
+- (void)calculateBitRate
+{
+    if (_packetDuration && _processedPacketsCount > BitRateEstimationMinPackets && _processedPacketsCount <= BitRateEstimationMaxPackets)
+    {
+        double averagePacketByteSize = _processedPacketsSizeTotal / _processedPacketsCount;
+        _bitRate = 8.0 * averagePacketByteSize / _packetDuration;
+    }
+}
+
 - (void)_errorForOSStatus:(OSStatus)status error:(NSError *__autoreleasing *)outError
 {
     if (status != noErr && outError != NULL)
@@ -176,9 +223,94 @@ static void MCAudioFileStreamPacketsCallBack(void *inClientData,
 - (void)handleAudioFileStreamPackets:(const void *)packets
                        numberOfBytes:(UInt32)numberOfBytes
                      numberOfPackets:(UInt32)numberOfPackets
-                  packetDescriptions:(AudioStreamBasicDescription *)packetDescriptions
+                  packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions
 {
+    if (_discontinuous) {
+        _discontinuous = NO;
+    }
     
+    if (numberOfBytes == 0 || numberOfPackets == 0) {
+        return;
+    }
+    BOOL deletePackDesc = NO;
+    if (packetDescriptions == NULL)
+    {
+        deletePackDesc = YES;
+        UInt32 packSize = numberOfBytes / numberOfPackets;
+        AudioStreamPacketDescription* descriptions = (AudioStreamPacketDescription*)malloc(sizeof(AudioStreamPacketDescription) * numberOfPackets);
+        for (int i = 0; i < numberOfPackets; i ++) {
+            UInt32 packetOffset = packSize * i;
+            descriptions[i].mStartOffset = packetOffset;
+            descriptions[i].mVariableFramesInPacket = 0;
+            if (i == numberOfPackets - 1)
+            {
+                descriptions[i].mDataByteSize = numberOfBytes - packetOffset;
+            } else {
+                descriptions[i].mDataByteSize = packSize;
+            }
+        }
+        packetDescriptions = descriptions;
+    }
+    
+    NSMutableArray *parsedDataArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < numberOfPackets; ++i) {
+        SInt64 packetOffset = packetDescriptions[i].mStartOffset;
+        MCParsedAudioData* parseData = [MCParsedAudioData parsedAudioDataWithBytes:packets + packetOffset packetDescription:packetDescriptions[i]];
+        
+        [parsedDataArray addObject:parseData];
+        
+        if (_processedPacketsCount < BitRateEstimationMaxPackets)
+        {
+            _processedPacketsSizeTotal += parseData.packetDescription.mDataByteSize;
+            _processedPacketsCount += 1;
+            [self calculateBitRate];
+            [self calculateDuration];
+        }
+    }
+    
+    [_delegate audioFileStream:self audioDataParsed:parsedDataArray];
+    if (deletePackDesc)
+    {
+        free(packetDescriptions);
+    }
+    
+}
+
+- (void)_closeAudioFileStream
+{
+    if (self.available)
+    {
+        AudioFileStreamClose(_audioFileStreamID);
+        _audioFileStreamID = NULL;
+    }
+}
+
+- (void)close
+{
+    [self _closeAudioFileStream];
+}
+
+- (NSData *)fetchMagicCookie
+{
+    UInt32 cookieSize;
+    Boolean writable;
+    OSStatus status = AudioFileStreamGetPropertyInfo(_audioFileStreamID, kAudioFileStreamProperty_MagicCookieData, &cookieSize, &writable);
+    if (status != noErr)
+    {
+        return nil;
+    }
+    
+    void *cookieData = malloc(cookieSize);
+    status = AudioFileStreamGetProperty(_audioFileStreamID, kAudioFileStreamProperty_MagicCookieData, &cookieSize, cookieData);
+    if (status != noErr)
+    {
+        return nil;
+    }
+    
+    NSData *cookie = [NSData dataWithBytes:cookieData length:cookieSize];
+    free(cookieData);
+    
+    return cookie;
 }
 
 @end
