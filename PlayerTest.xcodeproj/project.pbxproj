@@ -17,7 +17,7 @@
 		B68320BA2046808E00997396 /* TextureOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B68320B92046808E00997396 /* TextureOneViewController.m */; };
 		B68320BC2046915A00997396 /* 123.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B68320BB2046915A00997396 /* 123.jpg */; };
 		B686245C2044E64200FE7C9D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B686245B2044E64200FE7C9D /* AppDelegate.m */; };
-		B686245F2044E64200FE7C9D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B686245E2044E64200FE7C9D /* ViewController.m */; };
+		B686245F2044E64200FE7C9D /* VedioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B686245E2044E64200FE7C9D /* VedioViewController.m */; };
 		B68624622044E64200FE7C9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B68624602044E64200FE7C9D /* Main.storyboard */; };
 		B68624642044E64200FE7C9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B68624632044E64200FE7C9D /* Assets.xcassets */; };
 		B68624672044E64200FE7C9D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B68624652044E64200FE7C9D /* LaunchScreen.storyboard */; };
@@ -50,6 +50,10 @@
 		B7CC2A9D2166525200FEDD67 /* NSTimer+BlocksSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9B2166525100FEDD67 /* NSTimer+BlocksSupport.m */; };
 		B7CC2AA0216652AB00FEDD67 /* MCSimpleAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9F216652AB00FEDD67 /* MCSimpleAudioPlayer.m */; };
 		B7D32AFF21605C5600E55325 /* MCAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D32AFE21605C5600E55325 /* MCAudioFile.m */; };
+		B7D39943217324FA00AF3DA8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D39942217324FA00AF3DA8 /* ViewController.m */; };
+		B7D3994C21732D9500AF3DA8 /* AudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D3994A21732D9500AF3DA8 /* AudioViewController.m */; };
+		B7D3994D21732D9500AF3DA8 /* AudioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7D3994B21732D9500AF3DA8 /* AudioViewController.xib */; };
+		B7D3994F21732F2200AF3DA8 /* MP3Sample.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7D3994E21732F2200AF3DA8 /* MP3Sample.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,8 +73,8 @@
 		B68624572044E64200FE7C9D /* PlayerTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayerTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B686245A2044E64200FE7C9D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B686245B2044E64200FE7C9D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		B686245D2044E64200FE7C9D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		B686245E2044E64200FE7C9D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		B686245D2044E64200FE7C9D /* VedioViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VedioViewController.h; sourceTree = "<group>"; };
+		B686245E2044E64200FE7C9D /* VedioViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VedioViewController.m; sourceTree = "<group>"; };
 		B68624612044E64200FE7C9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B68624632044E64200FE7C9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B68624662044E64200FE7C9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -223,6 +227,12 @@
 		B7CC2A9F216652AB00FEDD67 /* MCSimpleAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCSimpleAudioPlayer.m; sourceTree = "<group>"; };
 		B7D32AFD21605C5600E55325 /* MCAudioFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioFile.h; sourceTree = "<group>"; };
 		B7D32AFE21605C5600E55325 /* MCAudioFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAudioFile.m; sourceTree = "<group>"; };
+		B7D39941217324FA00AF3DA8 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		B7D39942217324FA00AF3DA8 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		B7D3994921732D9500AF3DA8 /* AudioViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioViewController.h; sourceTree = "<group>"; };
+		B7D3994A21732D9500AF3DA8 /* AudioViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioViewController.m; sourceTree = "<group>"; };
+		B7D3994B21732D9500AF3DA8 /* AudioViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioViewController.xib; sourceTree = "<group>"; };
+		B7D3994E21732F2200AF3DA8 /* MP3Sample.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = MP3Sample.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -294,8 +304,10 @@
 				B68320AF20467CEC00997396 /* Player */,
 				B686245A2044E64200FE7C9D /* AppDelegate.h */,
 				B686245B2044E64200FE7C9D /* AppDelegate.m */,
-				B686245D2044E64200FE7C9D /* ViewController.h */,
-				B686245E2044E64200FE7C9D /* ViewController.m */,
+				B7D39941217324FA00AF3DA8 /* ViewController.h */,
+				B7D39942217324FA00AF3DA8 /* ViewController.m */,
+				B686245D2044E64200FE7C9D /* VedioViewController.h */,
+				B686245E2044E64200FE7C9D /* VedioViewController.m */,
 				B686247520452AC600FE7C9D /* MovieObject.h */,
 				B686247620452AC600FE7C9D /* MovieObject.m */,
 				B67C3482205121F40044DFF1 /* TestMovie.h */,
@@ -529,6 +541,7 @@
 		B77BF064214F730200BFF176 /* AudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				B7D3994E21732F2200AF3DA8 /* MP3Sample.mp3 */,
 				5ACC4D5F2158B45300B48C65 /* MCAudioSession.h */,
 				5ACC4D602158B45300B48C65 /* MCAudioSession.m */,
 				5A432C112158D5F100928592 /* MCParsedAudioData.h */,
@@ -545,6 +558,9 @@
 				B7CC2A9F216652AB00FEDD67 /* MCSimpleAudioPlayer.m */,
 				B7CC2A9C2166525100FEDD67 /* NSTimer+BlocksSupport.h */,
 				B7CC2A9B2166525100FEDD67 /* NSTimer+BlocksSupport.m */,
+				B7D3994921732D9500AF3DA8 /* AudioViewController.h */,
+				B7D3994A21732D9500AF3DA8 /* AudioViewController.m */,
+				B7D3994B21732D9500AF3DA8 /* AudioViewController.xib */,
 			);
 			path = AudioPlayer;
 			sourceTree = "<group>";
@@ -611,10 +627,12 @@
 				B68320B420467D1200997396 /* timg.jpeg in Resources */,
 				B68320B620467D1200997396 /* TextureOneVertexShader.glsl in Resources */,
 				B68320BC2046915A00997396 /* 123.jpg in Resources */,
+				B7D3994F21732F2200AF3DA8 /* MP3Sample.mp3 in Resources */,
 				B68624672044E64200FE7C9D /* LaunchScreen.storyboard in Resources */,
 				B68320B720467D1200997396 /* TextureOneFragmentShader.glsl in Resources */,
 				B6B3EAC1204FBBDE0050C67E /* test.mp4 in Resources */,
 				B68624642044E64200FE7C9D /* Assets.xcassets in Resources */,
+				B7D3994D21732D9500AF3DA8 /* AudioViewController.xib in Resources */,
 				B68320B520467D1200997396 /* testImage.png in Resources */,
 				B68624622044E64200FE7C9D /* Main.storyboard in Resources */,
 			);
@@ -627,10 +645,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7D39943217324FA00AF3DA8 /* ViewController.m in Sources */,
 				5ACC4D612158B45300B48C65 /* MCAudioSession.m in Sources */,
 				B686247720452AC600FE7C9D /* MovieObject.m in Sources */,
 				B68320BA2046808E00997396 /* TextureOneViewController.m in Sources */,
-				B686245F2044E64200FE7C9D /* ViewController.m in Sources */,
+				B686245F2044E64200FE7C9D /* VedioViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
 				B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */,
 				B686246A2044E64200FE7C9D /* main.m in Sources */,
@@ -639,6 +658,7 @@
 				B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */,
 				B7CC2A9D2166525200FEDD67 /* NSTimer+BlocksSupport.m in Sources */,
 				B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */,
+				B7D3994C21732D9500AF3DA8 /* AudioViewController.m in Sources */,
 				B7D32AFF21605C5600E55325 /* MCAudioFile.m in Sources */,
 				B6B3EABF204FBA810050C67E /* TestOne.m in Sources */,
 				B67C3484205121F40044DFF1 /* TestMovie.m in Sources */,

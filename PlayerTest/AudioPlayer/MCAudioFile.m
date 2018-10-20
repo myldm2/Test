@@ -25,7 +25,7 @@ static const UInt32 packetPerRead = 15;
 
 @implementation MCAudioFile
 
-- (instancetype)initWithFilePath:(NSString *)filePath fileType:(id)fileType
+- (instancetype)initWithFilePath:(NSString *)filePath fileType:(AudioFileTypeID)fileType
 {
     self = [super init];
     if (self) {
@@ -291,6 +291,16 @@ static const UInt32 packetPerRead = 15;
 - (BOOL)available
 {
     return _audioFileID != NULL;
+}
+
+- (void)seekToTime:(NSTimeInterval)time
+{
+    _packetOffset = floor(time / _packetDuration);
+}
+
+- (void)close
+{
+    [self _closeAudioFile];
 }
 
 static OSStatus MCAudioFileReadCallBack(void *inClientData, SInt64 inPosition, UInt32 requestCount, void *buffer, UInt32 *actualCount)

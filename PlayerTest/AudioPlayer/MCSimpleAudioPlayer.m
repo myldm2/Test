@@ -346,4 +346,53 @@
     [self cleanup];
 }
 
+#pragma mark - method
+- (void)play
+{
+    if (!_started)
+    {
+        _started = YES;
+        [self _mutexInit];
+        _thread = [[NSThread alloc] initWithTarget:self selector:@selector(threadMain) object:nil];
+        [_thread start];
+    }
+    else
+    {
+        if (_status == MCSAPStatusPaused || _pauseRequired)
+        {
+            _pausedByInterrupt = NO;
+            _pauseRequired = NO;
+            if ([[MCAudioSession sharedInstance] setActive:YES error:NULL])
+            {
+                [[MCAudioSession sharedInstance] setCategory:kAudioSessionCategory_MediaPlayback error:NULL];
+                [self _resume];
+            }
+        }
+    }
+}
+
+- (void)_resume
+{
+    [_audioQueue resume];
+    [self _mutexSignal];
+}
+
+- (void)pause
+{
+    if (self.isPlayingOrWaiting && self.status != MCSAPStatusFlushing)
+    {
+        _pauseRequired = YES;
+    }
+}
+
+- (void)stop
+{
+    _stopRequired = YES;
+    [self _mutexSignal];
+}
+
+- (void)audioFileStream:(nonnull MCAudioFileStream *)audioFileStream audioDataParsed:(nonnull NSArray *)audioData {
+    <#code#>
+}
+
 @end
