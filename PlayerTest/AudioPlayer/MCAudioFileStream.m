@@ -57,7 +57,7 @@ static void MCAudioFileStreamPacketsCallBack(void *inClientData,
         _discontinuous = NO;
         _fileType = fileType;
         _fileSize = fileSize;
-        
+        [self _openAudioFileStreamWithFileTypeHint:_fileType error:error];
     }
     return self;
 }

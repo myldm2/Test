@@ -73,7 +73,7 @@ static const UInt32 packetPerRead = 15;
     }
 }
 
-- (void)_calculatePacketDuration
+- (void)_calculatepPacketDuration
 {
     if (_format.mSampleRate > 0)
     {
@@ -167,7 +167,7 @@ static const UInt32 packetPerRead = 15;
             [self _closeAudioFile];
             return;
         } else {
-            [self _calculatePacketDuration];
+            [self _calculatepPacketDuration];
         }
         
     }

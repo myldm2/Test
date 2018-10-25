@@ -392,7 +392,56 @@
 }
 
 - (void)audioFileStream:(nonnull MCAudioFileStream *)audioFileStream audioDataParsed:(nonnull NSArray *)audioData {
-    <#code#>
+    [_buffer enqueueFromDataArray:audioData];
+}
+
+#pragma mark - progress
+- (NSTimeInterval)progress
+{
+    if (_seekRequired)
+    {
+        return _seekTime;
+    }
+    return _timingOffset + _audioQueue.playedTime;
+}
+
+- (void)setProgress:(NSTimeInterval)progress
+{
+    _seekRequired = YES;
+    _seekTime = progress;
+}
+
+- (NSTimeInterval)duration
+{
+    return _usingAudioFile ? _audioFile.duration : _audioFileStream.duration;
+}
+
+#pragma mark - interrupt
+- (void)interruptHandler:(NSNotification *)notification
+{
+    UInt32 interruptionState = [notification.userInfo[MCAudioSessionInterruptionStateKey] unsignedIntValue];
+    
+    if (interruptionState == kAudioSessionBeginInterruption)
+    {
+        _pausedByInterrupt = YES;
+        [_audioQueue pause];
+        [self setStatusInternal:MCSAPStatusPaused];
+        
+    }
+    else if (interruptionState == kAudioSessionEndInterruption)
+    {
+        AudioSessionInterruptionType interruptionType = [notification.userInfo[MCAudioSessionInterruptionTypeKey] unsignedIntValue];
+        if (interruptionType == kAudioSessionInterruptionType_ShouldResume)
+        {
+            if (self.status == MCSAPStatusPaused && _pausedByInterrupt)
+            {
+                if ([[MCAudioSession sharedInstance] setActive:YES error:NULL])
+                {
+                    [self play];
+                }
+            }
+        }
+    }
 }
 
 @end

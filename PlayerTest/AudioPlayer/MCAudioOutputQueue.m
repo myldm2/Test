@@ -135,6 +135,17 @@ static void MCAudioQueuePropertyCallback(void* inUserData, AudioQueueRef inAQ, A
     [self setVolumeParameter];
 }
 
+- (BOOL)available
+{
+    return _audioQueue != NULL;
+}
+
+- (void)setVolume:(float)volume
+{
+    _volume = volume;
+    [self setVolumeParameter];
+}
+
 - (void)setVolumeParameter
 {
     [self setParameter:kAudioQueueParam_Volume value:_volume error:NULL];
