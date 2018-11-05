@@ -43,6 +43,10 @@
 		B686251120454A5700FE7C9D /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B686251020454A5700FE7C9D /* libiconv.tbd */; };
 		B6B3EABF204FBA810050C67E /* TestOne.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B3EABE204FBA810050C67E /* TestOne.m */; };
 		B6B3EAC1204FBBDE0050C67E /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B6B3EAC0204FBBDE0050C67E /* test.mp4 */; };
+		B70B77EF218FE0C4005A5AC4 /* QQMusicCache-101786885-13-0.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B70B77EE218FE0C3005A5AC4 /* QQMusicCache-101786885-13-0.mp3 */; };
+		B70B77F3218FE44A005A5AC4 /* MAAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B70B77F2218FE44A005A5AC4 /* MAAudioFileStream.m */; };
+		B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B70B77F5219017BE005A5AC4 /* MAAudioViewController.m */; };
+		B70B77F821901866005A5AC4 /* MAAudioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B70B77F721901866005A5AC4 /* MAAudioViewController.xib */; };
 		B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B73A48C3214B8E4E006A8EF9 /* Decoder.m */; };
 		B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */; };
 		B7CC2A972165F5B300FEDD67 /* MCAudioOutputQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A962165F5B300FEDD67 /* MCAudioOutputQueue.m */; };
@@ -213,6 +217,12 @@
 		B6B3EABD204FBA810050C67E /* TestOne.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOne.h; sourceTree = "<group>"; };
 		B6B3EABE204FBA810050C67E /* TestOne.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestOne.m; sourceTree = "<group>"; };
 		B6B3EAC0204FBBDE0050C67E /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
+		B70B77EE218FE0C3005A5AC4 /* QQMusicCache-101786885-13-0.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "QQMusicCache-101786885-13-0.mp3"; sourceTree = "<group>"; };
+		B70B77F1218FE44A005A5AC4 /* MAAudioFileStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioFileStream.h; sourceTree = "<group>"; };
+		B70B77F2218FE44A005A5AC4 /* MAAudioFileStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAAudioFileStream.m; sourceTree = "<group>"; };
+		B70B77F4219017BE005A5AC4 /* MAAudioViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioViewController.h; sourceTree = "<group>"; };
+		B70B77F5219017BE005A5AC4 /* MAAudioViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAAudioViewController.m; sourceTree = "<group>"; };
+		B70B77F721901866005A5AC4 /* MAAudioViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MAAudioViewController.xib; sourceTree = "<group>"; };
 		B73A48C2214B8E4E006A8EF9 /* Decoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
 		B73A48C3214B8E4E006A8EF9 /* Decoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Decoder.m; sourceTree = "<group>"; };
 		B7CC2A9221636E4E00FEDD67 /* MCAudioFileStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioFileStream.h; sourceTree = "<group>"; };
@@ -300,6 +310,7 @@
 		B68624592044E64200FE7C9D /* PlayerTest */ = {
 			isa = PBXGroup;
 			children = (
+				B70B77F0218FE169005A5AC4 /* MAAudioPlayer */,
 				B77BF064214F730200BFF176 /* AudioPlayer */,
 				B68320AF20467CEC00997396 /* Player */,
 				B686245A2044E64200FE7C9D /* AppDelegate.h */,
@@ -538,9 +549,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B70B77F0218FE169005A5AC4 /* MAAudioPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				B70B77F1218FE44A005A5AC4 /* MAAudioFileStream.h */,
+				B70B77F2218FE44A005A5AC4 /* MAAudioFileStream.m */,
+				B70B77F4219017BE005A5AC4 /* MAAudioViewController.h */,
+				B70B77F5219017BE005A5AC4 /* MAAudioViewController.m */,
+				B70B77F721901866005A5AC4 /* MAAudioViewController.xib */,
+			);
+			path = MAAudioPlayer;
+			sourceTree = "<group>";
+		};
 		B77BF064214F730200BFF176 /* AudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				B70B77EE218FE0C3005A5AC4 /* QQMusicCache-101786885-13-0.mp3 */,
 				B7D3994E21732F2200AF3DA8 /* MP3Sample.mp3 */,
 				5ACC4D5F2158B45300B48C65 /* MCAudioSession.h */,
 				5ACC4D602158B45300B48C65 /* MCAudioSession.m */,
@@ -627,8 +651,10 @@
 				B68320B420467D1200997396 /* timg.jpeg in Resources */,
 				B68320B620467D1200997396 /* TextureOneVertexShader.glsl in Resources */,
 				B68320BC2046915A00997396 /* 123.jpg in Resources */,
+				B70B77EF218FE0C4005A5AC4 /* QQMusicCache-101786885-13-0.mp3 in Resources */,
 				B7D3994F21732F2200AF3DA8 /* MP3Sample.mp3 in Resources */,
 				B68624672044E64200FE7C9D /* LaunchScreen.storyboard in Resources */,
+				B70B77F821901866005A5AC4 /* MAAudioViewController.xib in Resources */,
 				B68320B720467D1200997396 /* TextureOneFragmentShader.glsl in Resources */,
 				B6B3EAC1204FBBDE0050C67E /* test.mp4 in Resources */,
 				B68624642044E64200FE7C9D /* Assets.xcassets in Resources */,
@@ -651,6 +677,7 @@
 				B68320BA2046808E00997396 /* TextureOneViewController.m in Sources */,
 				B686245F2044E64200FE7C9D /* VedioViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
+				B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */,
 				B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */,
 				B686246A2044E64200FE7C9D /* main.m in Sources */,
 				5A432C132158D5F100928592 /* MCParsedAudioData.m in Sources */,
@@ -661,6 +688,7 @@
 				B7D3994C21732D9500AF3DA8 /* AudioViewController.m in Sources */,
 				B7D32AFF21605C5600E55325 /* MCAudioFile.m in Sources */,
 				B6B3EABF204FBA810050C67E /* TestOne.m in Sources */,
+				B70B77F3218FE44A005A5AC4 /* MAAudioFileStream.m in Sources */,
 				B67C3484205121F40044DFF1 /* TestMovie.m in Sources */,
 				B686245C2044E64200FE7C9D /* AppDelegate.m in Sources */,
 				B7CC2AA0216652AB00FEDD67 /* MCSimpleAudioPlayer.m in Sources */,

@@ -28,7 +28,7 @@
     
     if (!_player)
     {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"MP3Sample" ofType:@"mp3"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"QQMusicCache-101786885-13-0" ofType:@"mp3"];
         _player = [[MCSimpleAudioPlayer alloc] initWithFilePath:path fileType:kAudioFileMP3Type];
         
         //        NSString *path = [[NSBundle mainBundle] pathForResource:@"M4ASample" ofType:@"m4a"];
