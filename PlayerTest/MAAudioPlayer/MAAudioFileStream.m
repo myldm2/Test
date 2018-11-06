@@ -7,12 +7,23 @@
 //
 
 #import "MAAudioFileStream.h"
-
+#define BitRateEstimationMaxPackets 5000
+#define BitRateEstimationMinPackets 10
 
 @interface MAAudioFileStream()
 {
     BOOL _discontinuous;
+    
+    SInt64 _dataOffset;
+    NSTimeInterval _packetDuration;
+    
+    UInt64 _processedPacketsCount;
+    UInt64 _processedPacketsSizeTotal;
 }
+
+@property (nonatomic, assign) AudioStreamBasicDescription format;
+
+
 
 @property (nonatomic, assign) AudioFileStreamID audioFileStreamID;
 
@@ -29,11 +40,7 @@ void audioFileStreamPropertyListener(
                                              AudioFileStreamPropertyFlags *    ioFlags)
 {
     MAAudioFileStream* observer = (__bridge MAAudioFileStream*)inClientData;
-    if (observer.audioFileStreamID == inAudioFileStream)
-    {
-        [observer handleAudioFileStream:inAudioFileStream property:inPropertyID];
-    }
-    
+    [observer handleAudioFileStream:inAudioFileStream property:inPropertyID];
 }
 
 void audioFileStreamPacketsListener(
@@ -43,6 +50,11 @@ void audioFileStreamPacketsListener(
                                     const void *                    inInputData,
                                     AudioStreamPacketDescription    *inPacketDescriptions)
 {
+    MAAudioFileStream* observer = (__bridge MAAudioFileStream*)inClientData;
+    [observer handleAudioFileStreamPackets:inInputData
+                             numberOfBytes:inNumberBytes
+                           numberOfPackets:inNumberPackets
+                        packetDescriptions:inPacketDescriptions];
     
 }
 
@@ -110,63 +122,140 @@ void audioFileStreamPacketsListener(
             bitRate = 0;
         }
         
+    } else if (propertyID == kAudioFileStreamProperty_DataOffset) {
+        UInt32 sizeOfSInt64 = sizeof(SInt64);
+        SInt64 offset = 0;
+        OSStatus status = AudioFileStreamGetProperty(audioFileStreamID, propertyID, &sizeOfSInt64, &offset);
+        if (status != noErr)
+        {
+            offset = 0;
+        }
+        _dataOffset = offset;
+//        SInt64 audioDataByteCount = _fileSize - offset;
+//        NSLog(@"mayinglun log audioDataByteCount:%lld", audioDataByteCount);
+        
+        
     } else if (propertyID == kAudioFileStreamProperty_FormatList) {
+        
+        BOOL error = false;
+        
         UInt32 dataSize = 0;
         OSStatus status = AudioFileStreamGetPropertyInfo(audioFileStreamID, propertyID, &dataSize, nil);
-        if (status == noErr && dataSize > 0)
+        if (status != noErr)
         {
-            return;
+            error = true;
         }
         
         AudioFormatListItem* items = malloc(dataSize);
+        UInt32 itemSize = sizeof(AudioFormatListItem);
+        UInt32 itemCount = dataSize / itemSize;
         status = AudioFileStreamGetProperty(audioFileStreamID, propertyID, &dataSize, items);
-        if (status == noErr)
+        if (status != noErr)
         {
-            return;
+            error = true;
         }
         
         
         status = AudioFileStreamGetPropertyInfo(audioFileStreamID, propertyID, &dataSize, nil);
-        if (status == noErr && dataSize > 0)
+        if (status != noErr)
         {
-            return;
+            error = true;
         }
         
         UInt32 supportedFormatsSize;
         status = AudioFormatGetPropertyInfo(kAudioFormatProperty_DecodeFormatIDs, 0, NULL, &supportedFormatsSize);
         if (status != noErr)
         {
-            return;
+            error = true;
         }
+        
         UInt32 supportedFormatCount = supportedFormatsSize / sizeof(AudioFormatID);
         AudioFormatID* supportedFormats = malloc(supportedFormatsSize);
-        
-        
-        
-        UInt32 itemSize = sizeof(AudioFormatListItem);
-        UInt32 itemCount = dataSize / itemSize;
-        NSTimeInterval duration = 0;
-        
-        for (int i = 0; i < itemCount; i ++)
+        status = AudioFormatGetProperty(kAudioFormatProperty_DecodeFormatIDs, 0, NULL, &supportedFormatsSize, supportedFormats);
+        if (status != noErr)
         {
-            AudioFormatListItem item = items[i];
-            if (item.mASBD.mSampleRate > 0)
-            {
-                NSTimeInterval packageDuration = item.mASBD.mFramesPerPacket / item.mASBD.mSampleRate;
-                duration += packageDuration;
-                NSLog(@"mayinglun log: packageDuration:%f", packageDuration);
-            }
+            error = true;
         }
+        
+        if (!error) {
             
-//        AudioFormatListItem
+            for (int i = 0; i < itemCount; i ++)
+            {
+                AudioFormatListItem item = items[i];
+                
+                for (int j = 0; j < supportedFormatCount; j ++)
+                {
+                    AudioFormatID formatID = supportedFormats[j];
+                    if (item.mASBD.mFormatID == formatID) {
+                        _format = item.mASBD;
+                        if (item.mASBD.mSampleRate > 0 && item.mASBD.mFramesPerPacket > 0)
+                        {
+                            _packetDuration = item.mASBD.mFramesPerPacket / item.mASBD.mSampleRate;
+                        }
+                        break;
+                    }
+                }
+            }
+            
+        }
+        free(items);
+        free(supportedFormats);
         
     }
     
 }
 
+- (void)handleAudioFileStreamPackets:(const void *)packets
+                       numberOfBytes:(UInt32)numberOfBytes
+                     numberOfPackets:(UInt32)numberOfPackets
+                  packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions
+{
+//    UInt32 offet
+    for (int i = 0; i < numberOfPackets; i ++) {
+        
+//        AudioStreamPacketDescription packetDescription = packetDescriptions[i];
+//        NSLog(@"AudioStreamPacketDescription:%llu", packetDescription.mDataByteSize);
+        
+        NSMutableArray *parsedDataArray = [[NSMutableArray alloc] init];
+        for (int i = 0; i < numberOfPackets; ++i) {
+            SInt64 packetOffset = packetDescriptions[i].mStartOffset;
+            MCParsedAudioData* parseData = [MCParsedAudioData parsedAudioDataWithBytes:packets + packetOffset packetDescription:packetDescriptions[i]];
+            
+            [parsedDataArray addObject:parseData];
+            
+            if (_processedPacketsCount < BitRateEstimationMaxPackets)
+            {
+                _processedPacketsSizeTotal += parseData.packetDescription.mDataByteSize;
+                _processedPacketsCount += 1;
+                [self calculateBitRate];
+                [self calculateDuration];
+            }
+        }
+       
+    }
+    
+}
+
+- (void)calculateDuration
+{
+    if (_fileSize > 0 && _bitRate > 0)
+    {
+        _duration = ((_fileSize - _dataOffset) * 8.0) / _bitRate;
+    }
+}
+
+- (void)calculateBitRate
+{
+    if (_packetDuration && _processedPacketsCount > BitRateEstimationMinPackets && _processedPacketsCount <= BitRateEstimationMaxPackets)
+    {
+        double averagePacketByteSize = _processedPacketsSizeTotal / _processedPacketsCount;
+        _bitRate = 8.0 * averagePacketByteSize / _packetDuration;
+    }
+}
+
 - (BOOL)parseData:(NSData *)data error:(NSError **)error
 {
-    OSStatus status = AudioFileStreamParseBytes(_audioFileStreamID,(UInt32)[data length],[data bytes],kAudioFileStreamParseFlag_Discontinuity );
+    OSStatus status = AudioFileStreamParseBytes(_audioFileStreamID,(UInt32)[data length],[data bytes], 0);
     [self _errorForOSStatus:status error:error];
     return status == noErr;
 }
