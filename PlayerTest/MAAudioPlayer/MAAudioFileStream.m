@@ -210,29 +210,24 @@ void audioFileStreamPacketsListener(
                      numberOfPackets:(UInt32)numberOfPackets
                   packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions
 {
-//    UInt32 offet
-    for (int i = 0; i < numberOfPackets; i ++) {
+
+    NSMutableArray *parsedDataArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < numberOfPackets; ++i) {
+        SInt64 packetOffset = packetDescriptions[i].mStartOffset;
+        MCParsedAudioData* parseData = [MCParsedAudioData parsedAudioDataWithBytes:packets + packetOffset packetDescription:packetDescriptions[i]];
         
-//        AudioStreamPacketDescription packetDescription = packetDescriptions[i];
-//        NSLog(@"AudioStreamPacketDescription:%llu", packetDescription.mDataByteSize);
+        [parsedDataArray addObject:parseData];
         
-        NSMutableArray *parsedDataArray = [[NSMutableArray alloc] init];
-        for (int i = 0; i < numberOfPackets; ++i) {
-            SInt64 packetOffset = packetDescriptions[i].mStartOffset;
-            MCParsedAudioData* parseData = [MCParsedAudioData parsedAudioDataWithBytes:packets + packetOffset packetDescription:packetDescriptions[i]];
-            
-            [parsedDataArray addObject:parseData];
-            
-            if (_processedPacketsCount < BitRateEstimationMaxPackets)
-            {
-                _processedPacketsSizeTotal += parseData.packetDescription.mDataByteSize;
-                _processedPacketsCount += 1;
-                [self calculateBitRate];
-                [self calculateDuration];
-            }
+        if (_processedPacketsCount < BitRateEstimationMaxPackets)
+        {
+            _processedPacketsSizeTotal += parseData.packetDescription.mDataByteSize;
+            _processedPacketsCount += 1;
+            [self calculateBitRate];
+            [self calculateDuration];
         }
-       
     }
+    
+    [_delegate audioFileStream:self audioDataParsed:parsedDataArray];
     
 }
 

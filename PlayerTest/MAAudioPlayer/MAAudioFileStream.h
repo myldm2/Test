@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MAAudioFileStream : NSObject
 
+@property (nonatomic,weak) id<MAAudioFileStreamDelegate> delegate;
 @property (nonatomic,assign,readonly) AudioFileTypeID fileType;
 @property (nonatomic,assign,readonly) unsigned long long fileSize;
 @property (nonatomic,assign,readonly) UInt32 maxPacketSize;
