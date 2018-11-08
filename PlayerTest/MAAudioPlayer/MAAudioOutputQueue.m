@@ -24,6 +24,7 @@ const int MAAudioQueueBufferCount = 2;
     NSMutableArray *_buffers;
     NSMutableArray *_reusableBuffers;
     BOOL _started;
+    BOOL _isRunning;
     
     pthread_mutex_t _mutex;
     pthread_cond_t _cond;
@@ -33,12 +34,39 @@ const int MAAudioQueueBufferCount = 2;
 
 @implementation MAAudioOutputQueue
     
-void MAAudioQueueOutputCallBack(
-                                         void * __nullable       inUserData,
-                                         AudioQueueRef           inAQ,
-                                         AudioQueueBufferRef     inBuffer)
+static void MAAudioQueueOutputCallBack(void *inClientData, AudioQueueRef inAQ, AudioQueueBufferRef inBuffer)
 {
-    
+    MAAudioOutputQueue* audioOutputQueue = (__bridge MAAudioOutputQueue *)inClientData;
+    [audioOutputQueue handleAudioQueueOutputCallBack:inAQ buffer:inBuffer];
+}
+
+- (void)handleAudioQueueOutputCallBack:(AudioQueueRef)audioQueue buffer:(AudioQueueBufferRef)buffer
+{
+    for (int i = 0; i < _buffers.count; ++ i) {
+        if (buffer == [_buffers[i] buffer])
+        {
+            [_reusableBuffers addObject:_buffers[i]];
+            break;
+        }
+    }
+    [self _mutexSignal];
+}
+
+static void MAAudioQueuePropertyCallback(void* inUserData, AudioQueueRef inAQ, AudioQueuePropertyID inID)
+{
+    MAAudioOutputQueue* audioQueue = (__bridge MAAudioOutputQueue *)inUserData;
+    [audioQueue handleAudioQueuePropertyCallBack:inAQ property:inID];
+}
+
+- (void)handleAudioQueuePropertyCallBack:(AudioQueueRef)audioQueue property:(AudioQueuePropertyID)property
+{
+    if (property == kAudioQueueProperty_IsRunning)
+    {
+        UInt32 isRunning  = 0;
+        UInt32 size = sizeof(isRunning);
+        AudioQueueGetProperty(audioQueue, property, &isRunning, &size);
+        _isRunning = isRunning;
+    }
 }
 
 - (instancetype)initWithFormat:(AudioStreamBasicDescription)format bufferSize:(UInt32)bufferSize macgicCookie:(NSData *)macgicCookie
@@ -59,6 +87,13 @@ void MAAudioQueueOutputCallBack(
 - (void)_createAudioOutputQueue:(NSData*)magicCookie
 {
     OSStatus status = AudioQueueNewOutput(&_format, MAAudioQueueOutputCallBack, (__bridge void *)self, nil, nil, 0, &_audioQueue);
+    if (status != noErr) {
+        AudioQueueDispose(_audioQueue, YES);
+        _audioQueue = NULL;
+        return;
+    }
+    
+    status = AudioQueueAddPropertyListener(_audioQueue, kAudioQueueProperty_IsRunning, MAAudioQueuePropertyCallback, (__bridge void *)self);
     if (status != noErr) {
         AudioQueueDispose(_audioQueue, YES);
         _audioQueue = NULL;
