@@ -108,6 +108,7 @@
             AudioStreamPacketDescription desc = block.packetDescription;
             desc.mStartOffset = [retData length];
             (*descriptions)[j] = desc;
+            NSLog(@"mayinglun log offset:%u %u", (unsigned int)desc.mStartOffset, (unsigned int)desc.mDataByteSize);
         }
         [retData appendData:block.data];
     }

@@ -69,13 +69,13 @@ static void MAAudioQueuePropertyCallback(void* inUserData, AudioQueueRef inAQ, A
     }
 }
 
-- (instancetype)initWithFormat:(AudioStreamBasicDescription)format bufferSize:(UInt32)bufferSize macgicCookie:(NSData *)macgicCookie
+- (instancetype)initWithFormat:(AudioStreamBasicDescription)format macgicCookie:(NSData *)macgicCookie
 {
     self = [super init];
     if (self) {
         _format = format;
         _volume = 1.0f;
-        _bufferSize = bufferSize;
+//        _bufferSize = bufferSize;
         _buffers = [[NSMutableArray alloc] init];
         _reusableBuffers = [[NSMutableArray alloc] init];
         [self _createAudioOutputQueue:macgicCookie];
@@ -100,24 +100,24 @@ static void MAAudioQueuePropertyCallback(void* inUserData, AudioQueueRef inAQ, A
         return;
     }
     
-    if (_buffers.count == 0)
-    {
-        for (int i = 0; i < MAAudioQueueBufferCount; ++ i)
-        {
-            AudioQueueBufferRef buffer;
-            status = AudioQueueAllocateBuffer(_audioQueue, _bufferSize, &buffer);
-            if (status != noErr)
-            {
-                AudioQueueDispose(_audioQueue, YES);
-                _audioQueue = NULL;
-                break;
-            }
-            MAAudioQueueBuffer *bufferObj = [[MAAudioQueueBuffer alloc] init];
-            bufferObj.buffer = buffer;
-            [_buffers addObject:bufferObj];
-            [_reusableBuffers addObject:bufferObj];
-        }
-    }
+//    if (_buffers.count == 0)
+//    {
+//        for (int i = 0; i < MAAudioQueueBufferCount; ++ i)
+//        {
+//            AudioQueueBufferRef buffer;
+//            status = AudioQueueAllocateBuffer(_audioQueue, _bufferSize, &buffer);
+//            if (status != noErr)
+//            {
+//                AudioQueueDispose(_audioQueue, YES);
+//                _audioQueue = NULL;
+//                break;
+//            }
+//            MAAudioQueueBuffer *bufferObj = [[MAAudioQueueBuffer alloc] init];
+//            bufferObj.buffer = buffer;
+//            [_buffers addObject:bufferObj];
+//            [_reusableBuffers addObject:bufferObj];
+//        }
+//    }
     
     UInt32 property = kAudioQueueHardwareCodecPolicy_PreferSoftware;
     [self setProperty:kAudioQueueProperty_HardwareCodecPolicy dataSize:sizeof(property) data:&property error:NULL];
@@ -131,26 +131,28 @@ static void MAAudioQueuePropertyCallback(void* inUserData, AudioQueueRef inAQ, A
     
 }
 
-- (BOOL)playData:(NSData *)data packetCount:(UInt32)packetCount packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions isEof:(BOOL)isEof
+- (BOOL)playData:(NSData *)data packetCount:(UInt32)count packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions isEof:(BOOL)isEof
 {
-    if ([data length] > _bufferSize)
-    {
-        return NO;
-    }
-    if (_reusableBuffers.count == 0)
-    {
-        if (!_started && ![self _start])
-        {
-            return NO;
-        }
-        [self _mutexWait];
-    }
-    MAAudioQueueBuffer* bufferObj = [_reusableBuffers firstObject];
-    [_reusableBuffers removeObject:bufferObj];
-    if (!bufferObj)
-    {
+//    if ([data length] > _bufferSize)
+//    {
+//        return NO;
+//    }
+//    if (_reusableBuffers.count == 0)
+//    {
+//        if (!_started && ![self _start])
+//        {
+//            return NO;
+//        }
+//        [self _mutexWait];
+//    }
+    OSStatus status = noErr;
+    
+    for (int i = 0; i < count; i ++) {
+        
+        MAAudioQueueBuffer* bufferObj;
+        
         AudioQueueBufferRef buffer;
-        OSStatus status = AudioQueueAllocateBuffer(_audioQueue, _bufferSize, &buffer);
+        status = AudioQueueAllocateBuffer(_audioQueue, (UInt32)[data length], &buffer);
         if (status == noErr)
         {
             bufferObj = [[MAAudioQueueBuffer alloc] init];
@@ -158,12 +160,19 @@ static void MAAudioQueuePropertyCallback(void* inUserData, AudioQueueRef inAQ, A
         } else {
             return NO;
         }
+        
+        memcpy(bufferObj.buffer->mAudioData, [data bytes], [data length]);
+        bufferObj.buffer->mAudioDataByteSize = (UInt32)[data length];
+        bufferObj.buffer = buffer;
+        
+        status = AudioQueueEnqueueBuffer(_audioQueue, bufferObj.buffer, count, packetDescriptions);
+        
+        if (status != noErr)
+        {
+            return NO;
+        }
+        
     }
-    
-    memcpy(bufferObj.buffer->mAudioData, [data bytes], [data length]);
-    bufferObj.buffer->mAudioDataByteSize = (UInt32)[data length];
-    
-    OSStatus status = AudioQueueEnqueueBuffer(_audioQueue, bufferObj.buffer, packetCount, packetDescriptions);
     
     if (status == noErr)
     {

@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)audioFileStream:(MAAudioFileStream *)audioFileStream audioDataParsed:(NSArray *)audioData;
 @optional
 - (void)audioFileStreamReadyToProducePackets:(MAAudioFileStream *)audioFileStream;
+- (void)audioFileStreamFinishProducePackets:(MAAudioFileStream *)audioFileStream;
+
 @end
 
 @interface MAAudioFileStream : NSObject
@@ -28,10 +30,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign,readonly) UInt32 maxPacketSize;
 @property (nonatomic,assign,readonly) NSTimeInterval duration;
 @property (nonatomic,assign,readonly) UInt32 bitRate;
+@property (nonatomic,assign,readonly) AudioStreamBasicDescription format;
 
 - (instancetype)initWithFileType:(AudioFileTypeID)fileType fileSize:(unsigned long long)fileSize error:(NSError * _Nullable __autoreleasing *)error;
 
 - (BOOL)parseData:(NSData *)data error:(NSError **)error;
+
+- (NSData *)fetchMagicCookie;
 
 @end
 

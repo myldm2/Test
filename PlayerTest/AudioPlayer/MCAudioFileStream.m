@@ -257,6 +257,8 @@ static void MCAudioFileStreamPacketsCallBack(void *inClientData,
         SInt64 packetOffset = packetDescriptions[i].mStartOffset;
         MCParsedAudioData* parseData = [MCParsedAudioData parsedAudioDataWithBytes:packets + packetOffset packetDescription:packetDescriptions[i]];
         
+//        NSLog(@"mayinglun log: %u", (unsigned int)packetDescriptions[i].mDataByteSize);
+        
         [parsedDataArray addObject:parseData];
         
         if (_processedPacketsCount < BitRateEstimationMaxPackets)

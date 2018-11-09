@@ -17,9 +17,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) float volume;
 @property (nonatomic,assign) UInt32 bufferSize;
 
-- (instancetype)initWithFormat:(AudioStreamBasicDescription)format bufferSize:(UInt32)bufferSize macgicCookie:(NSData *)macgicCookie;
+- (instancetype)initWithFormat:(AudioStreamBasicDescription)format macgicCookie:(NSData *)macgicCookie;
 
-- (BOOL)playData:(NSData *)data packetCount:(UInt32)packetCount packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions isEof:(BOOL)isEof;
+- (BOOL)playData:(NSData *)data packetCount:(UInt32)count packetDescriptions:(AudioStreamPacketDescription *)packetDescriptions isEof:(BOOL)isEof;
+
+- (BOOL)pause;
+- (BOOL)resume;
 
 @end
 

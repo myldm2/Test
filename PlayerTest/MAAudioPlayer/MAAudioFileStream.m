@@ -15,15 +15,13 @@
     BOOL _discontinuous;
     
     SInt64 _dataOffset;
+    SInt64 _audioDataByteCount;
+    SInt64 _parseDataByteCount;
     NSTimeInterval _packetDuration;
     
     UInt64 _processedPacketsCount;
     UInt64 _processedPacketsSizeTotal;
 }
-
-@property (nonatomic, assign) AudioStreamBasicDescription format;
-
-
 
 @property (nonatomic, assign) AudioFileStreamID audioFileStreamID;
 
@@ -131,7 +129,7 @@ void audioFileStreamPacketsListener(
             offset = 0;
         }
         _dataOffset = offset;
-//        SInt64 audioDataByteCount = _fileSize - offset;
+        _audioDataByteCount = _fileSize - offset;
 //        NSLog(@"mayinglun log audioDataByteCount:%lld", audioDataByteCount);
         
         
@@ -214,6 +212,8 @@ void audioFileStreamPacketsListener(
     NSMutableArray *parsedDataArray = [[NSMutableArray alloc] init];
     for (int i = 0; i < numberOfPackets; ++i) {
         SInt64 packetOffset = packetDescriptions[i].mStartOffset;
+        _parseDataByteCount += packetDescriptions[i].mDataByteSize;
+        
         MCParsedAudioData* parseData = [MCParsedAudioData parsedAudioDataWithBytes:packets + packetOffset packetDescription:packetDescriptions[i]];
         
         [parsedDataArray addObject:parseData];
@@ -228,6 +228,11 @@ void audioFileStreamPacketsListener(
     }
     
     [_delegate audioFileStream:self audioDataParsed:parsedDataArray];
+    
+    if (_parseDataByteCount == _audioDataByteCount)
+    {
+        [_delegate audioFileStreamFinishProducePackets:self];
+    }
     
 }
 
@@ -261,6 +266,28 @@ void audioFileStreamPacketsListener(
     {
         *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
     }
+}
+
+- (NSData *)fetchMagicCookie
+{
+    UInt32 cookieDataSize = 0;
+    OSStatus status = AudioFileStreamGetPropertyInfo(_audioFileStreamID, kAudioFileStreamProperty_MagicCookieData, &cookieDataSize, NULL);
+    
+    if (status != noErr)
+    {
+        return nil;
+    }
+    
+    void * magicCookie = malloc(cookieDataSize);
+    status = AudioFileStreamGetProperty(_audioFileStreamID, kAudioFileStreamProperty_MagicCookieData, &cookieDataSize, magicCookie);
+    
+    if (status != noErr)
+    {
+        return nil;
+    }
+    
+    NSData* data = [NSData dataWithBytes:magicCookie length:cookieDataSize];
+    return data;
 }
 
 @end
