@@ -48,7 +48,7 @@
 		B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B70B77F5219017BE005A5AC4 /* MAAudioViewController.m */; };
 		B70B77F821901866005A5AC4 /* MAAudioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B70B77F721901866005A5AC4 /* MAAudioViewController.xib */; };
 		B71503CD2195602700FCCAE7 /* MAAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B71503CC2195602700FCCAE7 /* MAAudioBuffer.m */; };
-		B72CD6AB21AD2D8D00438F90 /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = B72CD6AA21AD2D8D00438F90 /* OpenGLView.m */; };
+		B72CD6AB21AD2D8D00438F90 /* OpenglView.m in Sources */ = {isa = PBXBuildFile; fileRef = B72CD6AA21AD2D8D00438F90 /* OpenglView.m */; };
 		B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B73A48C3214B8E4E006A8EF9 /* Decoder.m */; };
 		B75F040721917B5400A5877F /* MAAudioOutputQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B75F040621917B5400A5877F /* MAAudioOutputQueue.m */; };
 		B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */; };
@@ -61,6 +61,7 @@
 		B7D3994C21732D9500AF3DA8 /* AudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D3994A21732D9500AF3DA8 /* AudioViewController.m */; };
 		B7D3994D21732D9500AF3DA8 /* AudioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7D3994B21732D9500AF3DA8 /* AudioViewController.xib */; };
 		B7D3994F21732F2200AF3DA8 /* MP3Sample.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7D3994E21732F2200AF3DA8 /* MP3Sample.mp3 */; };
+		B7E5B3BF21B128770008D018 /* OpenalPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E5B3BE21B128770008D018 /* OpenalPlayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -228,8 +229,8 @@
 		B70B77F721901866005A5AC4 /* MAAudioViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MAAudioViewController.xib; sourceTree = "<group>"; };
 		B71503CB2195602700FCCAE7 /* MAAudioBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioBuffer.h; sourceTree = "<group>"; };
 		B71503CC2195602700FCCAE7 /* MAAudioBuffer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAAudioBuffer.m; sourceTree = "<group>"; };
-		B72CD6A921AD2D8D00438F90 /* OpenGLView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
-		B72CD6AA21AD2D8D00438F90 /* OpenGLView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
+		B72CD6A921AD2D8D00438F90 /* OpenglView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenglView.h; sourceTree = "<group>"; };
+		B72CD6AA21AD2D8D00438F90 /* OpenglView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenglView.m; sourceTree = "<group>"; };
 		B73A48C2214B8E4E006A8EF9 /* Decoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
 		B73A48C3214B8E4E006A8EF9 /* Decoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Decoder.m; sourceTree = "<group>"; };
 		B75F040521917B5400A5877F /* MAAudioOutputQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioOutputQueue.h; sourceTree = "<group>"; };
@@ -252,6 +253,9 @@
 		B7D3994A21732D9500AF3DA8 /* AudioViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioViewController.m; sourceTree = "<group>"; };
 		B7D3994B21732D9500AF3DA8 /* AudioViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioViewController.xib; sourceTree = "<group>"; };
 		B7D3994E21732F2200AF3DA8 /* MP3Sample.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = MP3Sample.mp3; sourceTree = "<group>"; };
+		B7E5B3BC21B109220008D018 /* YUV_GL_DATA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YUV_GL_DATA.h; sourceTree = "<group>"; };
+		B7E5B3BD21B128770008D018 /* OpenalPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenalPlayer.h; sourceTree = "<group>"; };
+		B7E5B3BE21B128770008D018 /* OpenalPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenalPlayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -578,8 +582,11 @@
 		B72CD6A821AD2CD900438F90 /* MAVedioPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				B72CD6A921AD2D8D00438F90 /* OpenGLView.h */,
-				B72CD6AA21AD2D8D00438F90 /* OpenGLView.m */,
+				B72CD6A921AD2D8D00438F90 /* OpenglView.h */,
+				B72CD6AA21AD2D8D00438F90 /* OpenglView.m */,
+				B7E5B3BC21B109220008D018 /* YUV_GL_DATA.h */,
+				B7E5B3BD21B128770008D018 /* OpenalPlayer.h */,
+				B7E5B3BE21B128770008D018 /* OpenalPlayer.m */,
 			);
 			path = MAVedioPlayer;
 			sourceTree = "<group>";
@@ -701,7 +708,7 @@
 				B686245F2044E64200FE7C9D /* VedioViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
 				B71503CD2195602700FCCAE7 /* MAAudioBuffer.m in Sources */,
-				B72CD6AB21AD2D8D00438F90 /* OpenGLView.m in Sources */,
+				B72CD6AB21AD2D8D00438F90 /* OpenglView.m in Sources */,
 				B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */,
 				B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */,
 				B686246A2044E64200FE7C9D /* main.m in Sources */,
@@ -713,6 +720,7 @@
 				B7D3994C21732D9500AF3DA8 /* AudioViewController.m in Sources */,
 				B7D32AFF21605C5600E55325 /* MCAudioFile.m in Sources */,
 				B6B3EABF204FBA810050C67E /* TestOne.m in Sources */,
+				B7E5B3BF21B128770008D018 /* OpenalPlayer.m in Sources */,
 				B75F040721917B5400A5877F /* MAAudioOutputQueue.m in Sources */,
 				B70B77F3218FE44A005A5AC4 /* MAAudioFileStream.m in Sources */,
 				B67C3484205121F40044DFF1 /* TestMovie.m in Sources */,

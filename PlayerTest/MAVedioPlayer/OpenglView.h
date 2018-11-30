@@ -1,5 +1,5 @@
 //
-//  OpenGLView.h
+//  OpenglView.h
 //  PlayerTest
 //
 //  Created by 玉洋 on 2018/11/27.
@@ -12,13 +12,13 @@
 #import <OpenGLES/ES2/glext.h>
 #import <OpenGLES/EAGL.h>
 #include <sys/time.h>
-//#import "YUV_GL_DATA.h"
+#import "YUV_GL_DATA.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OpenGLView : UIView
+@interface OpenglView : UIView
 
-//- (void)displayYUV420pData:(H264YUV_Frame *) frame;
+- (void)displayYUV420pData:(H264YUV_Frame *) frame;
 - (void)setVideoSize:(GLuint)width height:(GLuint)height;
 - (void)clearFrame;
 

@@ -1,12 +1,12 @@
 //
-//  OpenGLView.m
+//  OpenglView.m
 //  PlayerTest
 //
 //  Created by 玉洋 on 2018/11/27.
 //  Copyright © 2018 baiyang. All rights reserved.
 //
 
-#import "OpenGLView.h"
+#import "OpenglView.h"
 
 #define FSH @"varying lowp vec2 TexCoordOut;\
 \
@@ -57,7 +57,7 @@ enum TextureType
     TEXC
 };
 
-@interface OpenGLView ()
+@interface OpenglView ()
 {
     /**
      OpenGL绘图上下文
@@ -102,7 +102,7 @@ enum TextureType
 
 @end
 
-@implementation OpenGLView
+@implementation OpenglView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -126,9 +126,33 @@ enum TextureType
     return self;
 }
 
+- (void)dealloc
+{
+    [self clearFrame];
+    [self destoryFrameAndRanderBuffer];
+}
+
 + (Class)layerClass
 {
     return [CAEAGLLayer class];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
+        @synchronized (self) {
+            [EAGLContext setCurrentContext:_glContext];
+            [self destoryFrameAndRanderBuffer];
+            [self createFrameAndRanderBuffer];
+        }
+        
+        glViewport(1, 1, self.bounds.size.width*_viewScale - 2, self.bounds.size.height*_viewScale - 2);
+        
+    });
+    
 }
 
 - (CAEAGLLayer *)eaglLayer
@@ -190,21 +214,21 @@ enum TextureType
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _textureYUV[TEXY]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, _textureYUV[TEXU]);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, _textureYUV[TEXV]);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
@@ -307,6 +331,99 @@ enum TextureType
     }
     _framebuffer = 0;
     _renderBuffer = 0;
+}
+
+- (void)setVideoSize:(GLuint)width height:(GLuint)height
+{
+    _videoH = height;
+    _videoW = width;
+    
+    void* blackData = malloc(width * height * 1.5);
+    if (blackData) {
+        memset(blackData, 0x0, width * height * 1.5);
+    }
+    [EAGLContext setCurrentContext:_glContext];
+    glBindTexture(GL_TEXTURE_2D, _textureYUV[TEXY]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED_EXT, width, height, 0, GL_RED_EXT, GL_UNSIGNED_BYTE, blackData);
+    
+    glBindTexture(GL_TEXTURE_2D, _textureYUV[TEXU]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED_EXT, width/2, height/2, 0, GL_RED_EXT, GL_UNSIGNED_BYTE, blackData + width * height);
+    
+    glBindTexture(GL_TEXTURE_2D, _textureYUV[TEXV]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED_EXT, width/2, height/2, 0, GL_RED_EXT, GL_UNSIGNED_BYTE, blackData + width * height * 5 / 4);
+    
+    free(blackData);
+}
+
+- (void)clearFrame
+{
+    if ([self window])
+    {
+        [EAGLContext setCurrentContext:_glContext];
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBindRenderbuffer(GL_RENDERBUFFER, _renderBuffer);
+        [_glContext presentRenderbuffer:GL_RENDERBUFFER];
+    }
+}
+
+- (void)render
+{
+    [EAGLContext setCurrentContext:_glContext];
+    CGSize size = self.bounds.size;
+    glViewport(1, 1, size.width * _viewScale -2, size.height * _viewScale -2);
+    
+    static const GLfloat squareVertices[] = {
+        -1.0f, -1.0f,
+        1.0f, -1.0f,
+        -1.0f,  1.0f,
+        1.0f,  1.0f,
+    };
+    
+    
+    static const GLfloat coordVertices[] = {
+        0.0f, 1.0f,
+        1.0f, 1.0f,
+        0.0f,  0.0f,
+        1.0f,  0.0f,
+    };
+    
+    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, 0, 0, squareVertices);
+    glEnableVertexAttribArray(ATTRIB_VERTEX);
+    glVertexAttribPointer(ATTRIB_TEXTURE, 2, GL_FLOAT, 0, 0, coordVertices);
+    glEnableVertexAttribArray(ATTRIB_TEXTURE);
+    
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glBindRenderbuffer(GL_RENDERBUFFER, _renderBuffer);
+    [_glContext presentRenderbuffer:GL_RENDERBUFFER];
+    
+}
+
+- (void)displayYUV420pData:(H264YUV_Frame *)frame
+{
+    if (!self.window) {
+        return;
+    }
+    int w = frame->width;
+    int h = frame->height;
+    @synchronized (self) {
+        if (w != _videoW || h != _videoH)
+        {
+            [self setVideoSize:(GLuint)w height:(GLuint)h];
+        }
+        [EAGLContext setCurrentContext:_glContext];
+        
+        glBindTexture(GL_TEXTURE_2D, _textureYUV[TEXY]);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)w, (GLsizei)h, GL_RED_EXT, GL_UNSIGNED_BYTE, frame->luma.dataBuffer);
+        
+        glBindTexture(GL_TEXTURE_2D, _textureYUV[TEXU]);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)w/2, (GLsizei)h/2, GL_RED_EXT, GL_UNSIGNED_BYTE, frame->chromaB.dataBuffer);
+        
+        glBindTexture(GL_TEXTURE_2D, _textureYUV[TEXV]);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)w/2, (GLsizei)h/2, GL_RED_EXT, GL_UNSIGNED_BYTE, frame->chromaR.dataBuffer);
+        [self render];
+        
+    }
 }
 
 @end
