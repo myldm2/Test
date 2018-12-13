@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) double playRate;                //播放速率
 
 #pragma mark - 接口
--(int)initOpenAL;
 -(int)updataQueueBuffer;
 -(void)cleanUpOpenAL;
 -(void)playSound;

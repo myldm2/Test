@@ -43,6 +43,7 @@
 		B686251120454A5700FE7C9D /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B686251020454A5700FE7C9D /* libiconv.tbd */; };
 		B6B3EABF204FBA810050C67E /* TestOne.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B3EABE204FBA810050C67E /* TestOne.m */; };
 		B6B3EAC1204FBBDE0050C67E /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B6B3EAC0204FBBDE0050C67E /* test.mp4 */; };
+		B706F3EE21C23CCB00E8F0DF /* FFmpegDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B706F3ED21C23CCB00E8F0DF /* FFmpegDecoder.m */; };
 		B70B77EF218FE0C4005A5AC4 /* QQMusicCache-101786885-13-0.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B70B77EE218FE0C3005A5AC4 /* QQMusicCache-101786885-13-0.mp3 */; };
 		B70B77F3218FE44A005A5AC4 /* MAAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B70B77F2218FE44A005A5AC4 /* MAAudioFileStream.m */; };
 		B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B70B77F5219017BE005A5AC4 /* MAAudioViewController.m */; };
@@ -221,6 +222,8 @@
 		B6B3EABD204FBA810050C67E /* TestOne.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOne.h; sourceTree = "<group>"; };
 		B6B3EABE204FBA810050C67E /* TestOne.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestOne.m; sourceTree = "<group>"; };
 		B6B3EAC0204FBBDE0050C67E /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
+		B706F3EC21C23CCB00E8F0DF /* FFmpegDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFmpegDecoder.h; sourceTree = "<group>"; };
+		B706F3ED21C23CCB00E8F0DF /* FFmpegDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FFmpegDecoder.m; sourceTree = "<group>"; };
 		B70B77EE218FE0C3005A5AC4 /* QQMusicCache-101786885-13-0.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "QQMusicCache-101786885-13-0.mp3"; sourceTree = "<group>"; };
 		B70B77F1218FE44A005A5AC4 /* MAAudioFileStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioFileStream.h; sourceTree = "<group>"; };
 		B70B77F2218FE44A005A5AC4 /* MAAudioFileStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAAudioFileStream.m; sourceTree = "<group>"; };
@@ -587,6 +590,8 @@
 				B7E5B3BC21B109220008D018 /* YUV_GL_DATA.h */,
 				B7E5B3BD21B128770008D018 /* OpenalPlayer.h */,
 				B7E5B3BE21B128770008D018 /* OpenalPlayer.m */,
+				B706F3EC21C23CCB00E8F0DF /* FFmpegDecoder.h */,
+				B706F3ED21C23CCB00E8F0DF /* FFmpegDecoder.m */,
 			);
 			path = MAVedioPlayer;
 			sourceTree = "<group>";
@@ -708,6 +713,7 @@
 				B686245F2044E64200FE7C9D /* VedioViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
 				B71503CD2195602700FCCAE7 /* MAAudioBuffer.m in Sources */,
+				B706F3EE21C23CCB00E8F0DF /* FFmpegDecoder.m in Sources */,
 				B72CD6AB21AD2D8D00438F90 /* OpenglView.m in Sources */,
 				B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */,
 				B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */,
