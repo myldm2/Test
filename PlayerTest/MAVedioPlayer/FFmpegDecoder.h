@@ -42,7 +42,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)Decode:(AVPacket*)pkt;
 - (H264YUV_Frame)YuvToGlData:(H264YUV_Frame)yuvFrame;
 - (BOOL)ToRGB:(char*)outBuf andWithOutHeight:(int)outHeight andWithOutWidth:(int)outWidth;
-- (UIImage*)ToImage:(char*)dataBuf andWithOutHeight:(int)outHeight andWithOutWidth:(int)outWidth;
 //音频重采样
 - (int)ToPCM:(char*)dataBuf;
 //获取错误信息

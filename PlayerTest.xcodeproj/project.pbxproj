@@ -63,6 +63,7 @@
 		B7D3994D21732D9500AF3DA8 /* AudioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7D3994B21732D9500AF3DA8 /* AudioViewController.xib */; };
 		B7D3994F21732F2200AF3DA8 /* MP3Sample.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7D3994E21732F2200AF3DA8 /* MP3Sample.mp3 */; };
 		B7E5B3BF21B128770008D018 /* OpenalPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E5B3BE21B128770008D018 /* OpenalPlayer.m */; };
+		B7E63E2021C7947C00F0C3C0 /* XPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E63E1F21C7947C00F0C3C0 /* XPlayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -259,6 +260,8 @@
 		B7E5B3BC21B109220008D018 /* YUV_GL_DATA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YUV_GL_DATA.h; sourceTree = "<group>"; };
 		B7E5B3BD21B128770008D018 /* OpenalPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenalPlayer.h; sourceTree = "<group>"; };
 		B7E5B3BE21B128770008D018 /* OpenalPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenalPlayer.m; sourceTree = "<group>"; };
+		B7E63E1E21C7947C00F0C3C0 /* XPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPlayer.h; sourceTree = "<group>"; };
+		B7E63E1F21C7947C00F0C3C0 /* XPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPlayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -592,6 +595,8 @@
 				B7E5B3BE21B128770008D018 /* OpenalPlayer.m */,
 				B706F3EC21C23CCB00E8F0DF /* FFmpegDecoder.h */,
 				B706F3ED21C23CCB00E8F0DF /* FFmpegDecoder.m */,
+				B7E63E1E21C7947C00F0C3C0 /* XPlayer.h */,
+				B7E63E1F21C7947C00F0C3C0 /* XPlayer.m */,
 			);
 			path = MAVedioPlayer;
 			sourceTree = "<group>";
@@ -713,6 +718,7 @@
 				B686245F2044E64200FE7C9D /* VedioViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
 				B71503CD2195602700FCCAE7 /* MAAudioBuffer.m in Sources */,
+				B7E63E2021C7947C00F0C3C0 /* XPlayer.m in Sources */,
 				B706F3EE21C23CCB00E8F0DF /* FFmpegDecoder.m in Sources */,
 				B72CD6AB21AD2D8D00438F90 /* OpenglView.m in Sources */,
 				B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */,
