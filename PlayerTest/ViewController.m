@@ -10,6 +10,7 @@
 #import "VedioViewController.h"
 #import "AudioViewController.h"
 #import "MAAudioViewController.h"
+#import "VedioPlayerViewController.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -31,7 +32,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -45,8 +46,10 @@
             cell.textLabel.text = @"视频播放";
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"音频播放";
-        } else {
+        } else if (indexPath.row == 2) {
             cell.textLabel.text = @"我的音频播放";
+        } else if (indexPath.row == 3) {
+            cell.textLabel.text = @"视频播放2";
         }
     }
     return cell;
@@ -61,8 +64,12 @@
     } else if (indexPath.row == 1) {
         AudioViewController* vc = [[AudioViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
-    } else {
+    } else if (indexPath.row == 2) {
         MAAudioViewController* vc = [[MAAudioViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if (indexPath.row == 3)
+    {
+        VedioPlayerViewController* vc = [[VedioPlayerViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

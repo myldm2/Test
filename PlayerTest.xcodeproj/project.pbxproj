@@ -52,6 +52,9 @@
 		B72CD6AB21AD2D8D00438F90 /* OpenglView.m in Sources */ = {isa = PBXBuildFile; fileRef = B72CD6AA21AD2D8D00438F90 /* OpenglView.m */; };
 		B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B73A48C3214B8E4E006A8EF9 /* Decoder.m */; };
 		B75F040721917B5400A5877F /* MAAudioOutputQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B75F040621917B5400A5877F /* MAAudioOutputQueue.m */; };
+		B77004EF21CC87EA00651B86 /* VedioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */; };
+		B77004F321CC88CA00651B86 /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B77004F121CC88CA00651B86 /* video.mp4 */; };
+		B77004F421CC88CA00651B86 /* icon_btn_back.png in Resources */ = {isa = PBXBuildFile; fileRef = B77004F221CC88CA00651B86 /* icon_btn_back.png */; };
 		B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */; };
 		B7CC2A972165F5B300FEDD67 /* MCAudioOutputQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A962165F5B300FEDD67 /* MCAudioOutputQueue.m */; };
 		B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A992166420900FEDD67 /* MCAudioBuffer.m */; };
@@ -239,6 +242,10 @@
 		B73A48C3214B8E4E006A8EF9 /* Decoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Decoder.m; sourceTree = "<group>"; };
 		B75F040521917B5400A5877F /* MAAudioOutputQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioOutputQueue.h; sourceTree = "<group>"; };
 		B75F040621917B5400A5877F /* MAAudioOutputQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAAudioOutputQueue.m; sourceTree = "<group>"; };
+		B77004ED21CC87EA00651B86 /* VedioPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VedioPlayerViewController.h; sourceTree = "<group>"; };
+		B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VedioPlayerViewController.m; sourceTree = "<group>"; };
+		B77004F121CC88CA00651B86 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
+		B77004F221CC88CA00651B86 /* icon_btn_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_btn_back.png; sourceTree = "<group>"; };
 		B7CC2A9221636E4E00FEDD67 /* MCAudioFileStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioFileStream.h; sourceTree = "<group>"; };
 		B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAudioFileStream.m; sourceTree = "<group>"; };
 		B7CC2A952165F5B300FEDD67 /* MCAudioOutputQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioOutputQueue.h; sourceTree = "<group>"; };
@@ -588,6 +595,7 @@
 		B72CD6A821AD2CD900438F90 /* MAVedioPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				B77004F021CC88CA00651B86 /* resource */,
 				B72CD6A921AD2D8D00438F90 /* OpenglView.h */,
 				B72CD6AA21AD2D8D00438F90 /* OpenglView.m */,
 				B7E5B3BC21B109220008D018 /* YUV_GL_DATA.h */,
@@ -597,8 +605,19 @@
 				B706F3ED21C23CCB00E8F0DF /* FFmpegDecoder.m */,
 				B7E63E1E21C7947C00F0C3C0 /* XPlayer.h */,
 				B7E63E1F21C7947C00F0C3C0 /* XPlayer.m */,
+				B77004ED21CC87EA00651B86 /* VedioPlayerViewController.h */,
+				B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */,
 			);
 			path = MAVedioPlayer;
+			sourceTree = "<group>";
+		};
+		B77004F021CC88CA00651B86 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				B77004F121CC88CA00651B86 /* video.mp4 */,
+				B77004F221CC88CA00651B86 /* icon_btn_back.png */,
+			);
+			path = resource;
 			sourceTree = "<group>";
 		};
 		B77BF064214F730200BFF176 /* AudioPlayer */ = {
@@ -699,6 +718,8 @@
 				B6B3EAC1204FBBDE0050C67E /* test.mp4 in Resources */,
 				B68624642044E64200FE7C9D /* Assets.xcassets in Resources */,
 				B7D3994D21732D9500AF3DA8 /* AudioViewController.xib in Resources */,
+				B77004F421CC88CA00651B86 /* icon_btn_back.png in Resources */,
+				B77004F321CC88CA00651B86 /* video.mp4 in Resources */,
 				B68320B520467D1200997396 /* testImage.png in Resources */,
 				B68624622044E64200FE7C9D /* Main.storyboard in Resources */,
 			);
@@ -712,6 +733,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7D39943217324FA00AF3DA8 /* ViewController.m in Sources */,
+				B77004EF21CC87EA00651B86 /* VedioPlayerViewController.m in Sources */,
 				5ACC4D612158B45300B48C65 /* MCAudioSession.m in Sources */,
 				B686247720452AC600FE7C9D /* MovieObject.m in Sources */,
 				B68320BA2046808E00997396 /* TextureOneViewController.m in Sources */,

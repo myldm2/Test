@@ -161,17 +161,19 @@
     if (!pCodecCtx) {
         return;
     }
-    int re = avcodec_receive_frame(pCodecCtx, tempFrame);
+    int re = avcodec_send_packet(pCodecCtx, pkt);
     if (re != 0) {
         return;
     }
     re = avcodec_receive_frame(pCodecCtx, tempFrame);
+    
     //解码后再获取pts  解码过程有缓存
     if (pkt->stream_index == _videoStreamIndex) {
         _vFps = (pYuv->pts *[self r2d:(pFormatCtx->streams[_videoStreamIndex]->time_base)])*1000;
     }else if (pkt->stream_index == _audioStreamIndex){
         _aFps = (pPcm->pts * [self r2d:(pFormatCtx->streams[_audioStreamIndex]->time_base)])*1000;
     }
+    
     printf("[D]");
     return;
 }
