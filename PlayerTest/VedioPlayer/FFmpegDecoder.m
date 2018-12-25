@@ -169,7 +169,10 @@
     
     //解码后再获取pts  解码过程有缓存
     if (pkt->stream_index == _videoStreamIndex) {
+        double pts = pYuv->pts;
+        double r2d = [self r2d:(pFormatCtx->streams[_videoStreamIndex]->time_base)];
         _vFps = (pYuv->pts *[self r2d:(pFormatCtx->streams[_videoStreamIndex]->time_base)])*1000;
+        NSLog(@"mayinglun log:pts:%f r2d:%f vFps:%d", pts, r2d, _vFps);
     }else if (pkt->stream_index == _audioStreamIndex){
         _aFps = (pPcm->pts * [self r2d:(pFormatCtx->streams[_audioStreamIndex]->time_base)])*1000;
     }

@@ -55,6 +55,8 @@
 		B77004EF21CC87EA00651B86 /* VedioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */; };
 		B77004F321CC88CA00651B86 /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B77004F121CC88CA00651B86 /* video.mp4 */; };
 		B77004F421CC88CA00651B86 /* icon_btn_back.png in Resources */ = {isa = PBXBuildFile; fileRef = B77004F221CC88CA00651B86 /* icon_btn_back.png */; };
+		B79F3F4821D2006F00066098 /* MAVedioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */; };
+		B7BC4DEB21D0C67700812FB2 /* MADecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BC4DEA21D0C67700812FB2 /* MADecoder.m */; };
 		B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */; };
 		B7CC2A972165F5B300FEDD67 /* MCAudioOutputQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A962165F5B300FEDD67 /* MCAudioOutputQueue.m */; };
 		B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A992166420900FEDD67 /* MCAudioBuffer.m */; };
@@ -246,6 +248,10 @@
 		B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VedioPlayerViewController.m; sourceTree = "<group>"; };
 		B77004F121CC88CA00651B86 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
 		B77004F221CC88CA00651B86 /* icon_btn_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_btn_back.png; sourceTree = "<group>"; };
+		B79F3F4621D2006F00066098 /* MAVedioPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAVedioPlayerViewController.h; sourceTree = "<group>"; };
+		B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAVedioPlayerViewController.m; sourceTree = "<group>"; };
+		B7BC4DE921D0C67700812FB2 /* MADecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADecoder.h; sourceTree = "<group>"; };
+		B7BC4DEA21D0C67700812FB2 /* MADecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADecoder.m; sourceTree = "<group>"; };
 		B7CC2A9221636E4E00FEDD67 /* MCAudioFileStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioFileStream.h; sourceTree = "<group>"; };
 		B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCAudioFileStream.m; sourceTree = "<group>"; };
 		B7CC2A952165F5B300FEDD67 /* MCAudioOutputQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCAudioOutputQueue.h; sourceTree = "<group>"; };
@@ -336,7 +342,8 @@
 		B68624592044E64200FE7C9D /* PlayerTest */ = {
 			isa = PBXGroup;
 			children = (
-				B72CD6A821AD2CD900438F90 /* MAVedioPlayer */,
+				B7BC4DE821D0C3A400812FB2 /* MAVedioPlayer */,
+				B72CD6A821AD2CD900438F90 /* VedioPlayer */,
 				B70B77F0218FE169005A5AC4 /* MAAudioPlayer */,
 				B77BF064214F730200BFF176 /* AudioPlayer */,
 				B68320AF20467CEC00997396 /* Player */,
@@ -592,7 +599,7 @@
 			path = MAAudioPlayer;
 			sourceTree = "<group>";
 		};
-		B72CD6A821AD2CD900438F90 /* MAVedioPlayer */ = {
+		B72CD6A821AD2CD900438F90 /* VedioPlayer */ = {
 			isa = PBXGroup;
 			children = (
 				B77004F021CC88CA00651B86 /* resource */,
@@ -608,7 +615,7 @@
 				B77004ED21CC87EA00651B86 /* VedioPlayerViewController.h */,
 				B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */,
 			);
-			path = MAVedioPlayer;
+			path = VedioPlayer;
 			sourceTree = "<group>";
 		};
 		B77004F021CC88CA00651B86 /* resource */ = {
@@ -646,6 +653,17 @@
 				B7D3994B21732D9500AF3DA8 /* AudioViewController.xib */,
 			);
 			path = AudioPlayer;
+			sourceTree = "<group>";
+		};
+		B7BC4DE821D0C3A400812FB2 /* MAVedioPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				B7BC4DE921D0C67700812FB2 /* MADecoder.h */,
+				B7BC4DEA21D0C67700812FB2 /* MADecoder.m */,
+				B79F3F4621D2006F00066098 /* MAVedioPlayerViewController.h */,
+				B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */,
+			);
+			path = MAVedioPlayer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -733,11 +751,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7D39943217324FA00AF3DA8 /* ViewController.m in Sources */,
+				B7BC4DEB21D0C67700812FB2 /* MADecoder.m in Sources */,
 				B77004EF21CC87EA00651B86 /* VedioPlayerViewController.m in Sources */,
 				5ACC4D612158B45300B48C65 /* MCAudioSession.m in Sources */,
 				B686247720452AC600FE7C9D /* MovieObject.m in Sources */,
 				B68320BA2046808E00997396 /* TextureOneViewController.m in Sources */,
 				B686245F2044E64200FE7C9D /* VedioViewController.m in Sources */,
+				B79F3F4821D2006F00066098 /* MAVedioPlayerViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
 				B71503CD2195602700FCCAE7 /* MAAudioBuffer.m in Sources */,
 				B7E63E2021C7947C00F0C3C0 /* XPlayer.m in Sources */,
