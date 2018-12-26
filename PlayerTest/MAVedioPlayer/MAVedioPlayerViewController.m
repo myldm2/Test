@@ -8,6 +8,7 @@
 
 #import "MAVedioPlayerViewController.h"
 #import "MADecoder.h"
+#import "MAVedioPlayer.h"
 
 @interface MAVedioPlayerViewController ()
 {
@@ -27,8 +28,15 @@
     char* realPath = "video.mp4";
     NSString * path0 = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:realPath] ofType:nil];
     
-    _decoder = [[MADecoder alloc] init];
-    [_decoder openUrl:[path0 UTF8String]];
+//    _decoder = [[MADecoder alloc] init];
+//    if (![_decoder openUrl:path0 error:nil])
+//    {
+//        NSLog(@"open vedio source failed");
+//    }
+    
+    MAVedioPlayer* player = [MAVedioPlayer sharedPlayer];
+    [player openUrl:path0 playerView:self.view];
+    [player play];
     
 }
 

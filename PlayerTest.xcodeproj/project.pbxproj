@@ -55,6 +55,8 @@
 		B77004EF21CC87EA00651B86 /* VedioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */; };
 		B77004F321CC88CA00651B86 /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B77004F121CC88CA00651B86 /* video.mp4 */; };
 		B77004F421CC88CA00651B86 /* icon_btn_back.png in Resources */ = {isa = PBXBuildFile; fileRef = B77004F221CC88CA00651B86 /* icon_btn_back.png */; };
+		B776AEE321D350F1002C6ED2 /* MAVedioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B776AEE221D350F1002C6ED2 /* MAVedioPlayer.m */; };
+		B776AEE621D37556002C6ED2 /* MAPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = B776AEE521D37556002C6ED2 /* MAPacket.m */; };
 		B79F3F4821D2006F00066098 /* MAVedioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */; };
 		B7BC4DEB21D0C67700812FB2 /* MADecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BC4DEA21D0C67700812FB2 /* MADecoder.m */; };
 		B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */; };
@@ -248,6 +250,10 @@
 		B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VedioPlayerViewController.m; sourceTree = "<group>"; };
 		B77004F121CC88CA00651B86 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
 		B77004F221CC88CA00651B86 /* icon_btn_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_btn_back.png; sourceTree = "<group>"; };
+		B776AEE121D350F1002C6ED2 /* MAVedioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAVedioPlayer.h; sourceTree = "<group>"; };
+		B776AEE221D350F1002C6ED2 /* MAVedioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAVedioPlayer.m; sourceTree = "<group>"; };
+		B776AEE421D37556002C6ED2 /* MAPacket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAPacket.h; sourceTree = "<group>"; };
+		B776AEE521D37556002C6ED2 /* MAPacket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPacket.m; sourceTree = "<group>"; };
 		B79F3F4621D2006F00066098 /* MAVedioPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAVedioPlayerViewController.h; sourceTree = "<group>"; };
 		B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAVedioPlayerViewController.m; sourceTree = "<group>"; };
 		B7BC4DE921D0C67700812FB2 /* MADecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADecoder.h; sourceTree = "<group>"; };
@@ -662,6 +668,10 @@
 				B7BC4DEA21D0C67700812FB2 /* MADecoder.m */,
 				B79F3F4621D2006F00066098 /* MAVedioPlayerViewController.h */,
 				B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */,
+				B776AEE121D350F1002C6ED2 /* MAVedioPlayer.h */,
+				B776AEE221D350F1002C6ED2 /* MAVedioPlayer.m */,
+				B776AEE421D37556002C6ED2 /* MAPacket.h */,
+				B776AEE521D37556002C6ED2 /* MAPacket.m */,
 			);
 			path = MAVedioPlayer;
 			sourceTree = "<group>";
@@ -761,6 +771,7 @@
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
 				B71503CD2195602700FCCAE7 /* MAAudioBuffer.m in Sources */,
 				B7E63E2021C7947C00F0C3C0 /* XPlayer.m in Sources */,
+				B776AEE621D37556002C6ED2 /* MAPacket.m in Sources */,
 				B706F3EE21C23CCB00E8F0DF /* FFmpegDecoder.m in Sources */,
 				B72CD6AB21AD2D8D00438F90 /* OpenglView.m in Sources */,
 				B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */,
@@ -775,6 +786,7 @@
 				B7D32AFF21605C5600E55325 /* MCAudioFile.m in Sources */,
 				B6B3EABF204FBA810050C67E /* TestOne.m in Sources */,
 				B7E5B3BF21B128770008D018 /* OpenalPlayer.m in Sources */,
+				B776AEE321D350F1002C6ED2 /* MAVedioPlayer.m in Sources */,
 				B75F040721917B5400A5877F /* MAAudioOutputQueue.m in Sources */,
 				B70B77F3218FE44A005A5AC4 /* MAAudioFileStream.m in Sources */,
 				B67C3484205121F40044DFF1 /* TestMovie.m in Sources */,
