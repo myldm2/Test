@@ -8,6 +8,7 @@
 
 #import "MADecoder.h"
 
+
 @interface MADecoder ()
 {
     NSLock* _lock;
@@ -19,7 +20,6 @@
     AVFrame           * _pPcm;
     AVCodec           * _pVideoCodec; //视频解码器
     AVCodec           * _pAudioCodec; //音频解码器
-
     
 }
 
@@ -118,19 +118,156 @@
     }
 }
 
-- (void)read:(AVPacket*)pkt error:(NSError**)error
+- (void)read:(MAPacket*)pkt error:(NSError**)error
 {
-    av_packet_unref(pkt);
+    av_packet_unref(pkt.packet);
     if (!_pFormatCtx) {
         return;
     }
-    int err = av_read_frame(_pFormatCtx, pkt);
-    if (err != 0)
+    int err = av_read_frame(_pFormatCtx, pkt.packet);
+//    if (err != 0)
+//    {
+//        NSLog(@"1");
+////        av_strerror(err, , <#size_t errbuf_size#>)
+//    } else {
+//        NSLog(@"==============data===============");
+//        NSLog(@"%d", pkt.packet->size);
+//    }
+}
+
+- (NSArray*)decodeYUV:(MAPacket*)pkt
+{
+    if (_pFormatCtx && pkt.packet->stream_index == _videoStreamIndex)
     {
-        NSLog(@"1");
-//        av_strerror(err, , <#size_t errbuf_size#>)
-    } else {
-        NSLog(@"2");
+        int re = avcodec_send_packet(_pVideoCodecCtx, pkt.packet);
+        if (re != 0) {
+            return nil;
+        }
+        NSMutableArray* frames = [NSMutableArray array];
+        while (re == 0) {
+            MAFrame* frame = [[MAFrame alloc] init];
+            re = avcodec_receive_frame(_pVideoCodecCtx, frame.frame);
+            if (re == 0) {
+                [frames addObject:frame];
+                
+                if (!frame.frame || frame.frame->linesize[0] <= 0)
+                {
+                    NSLog(@"mayinglun log: frame 解析失败");
+                } else {
+                    NSLog(@"mayinglun log: frame 解析成功");
+                }
+                
+            }
+        }
+        return [frames copy];
+    }
+    return nil;
+}
+
+- (NSArray*)decodePCM:(MAPacket*)pkt
+{
+    if (_pFormatCtx && pkt.packet->stream_index == _audioStreamIndex)
+    {
+        int re = avcodec_send_packet(_pAudioCodecCtx, pkt.packet);
+        if (re != 0) {
+            return nil;
+        }
+        NSMutableArray* frames = [NSMutableArray array];
+        while (re == 0) {
+            MAFrame* frame = [[MAFrame alloc] init];
+            re = avcodec_receive_frame(_pAudioCodecCtx, frame.frame);
+            if (re == 0) {
+                [frames addObject:frame];
+            }
+        }
+        return [frames copy];
+    }
+    return nil;
+}
+
+//- (NSArray*)decode:(MAPacket*)pkt
+//{
+//    if (!_pFormatCtx) {
+//        return nil;
+//    }
+//    if (_pYuv == NULL) {
+//        _pYuv = av_frame_alloc();
+//    }
+//    if (_pPcm == NULL) {
+//        _pPcm = av_frame_alloc();
+//    }
+//    AVCodecContext* pCodecCtx = NULL;
+//    AVFrame* tempFrame = NULL;
+//    if (pkt.packet->stream_index == _videoStreamIndex) {
+//        pCodecCtx = _pVideoCodecCtx;
+//        tempFrame = _pYuv;
+//    }
+//    if (pkt.packet->stream_index == _audioStreamIndex) {
+//        pCodecCtx = _pAudioCodecCtx;
+//        tempFrame = _pPcm;
+//    }
+//    if (!pCodecCtx) {
+//        return nil;
+//    }
+//    int re = avcodec_send_packet(pCodecCtx, pkt.packet);
+//    if (re != 0) {
+//        return nil;
+//    }
+////    NSMutableArray*
+////    while (re != 0) {
+////        re = avcodec_receive_frame(pCodecCtx, tempFrame);
+////    }
+//
+//    return nil;
+//}
+
+- (H264YUV_Frame)yuvToGlData:(MAFrame*)frame :(H264YUV_Frame)yuvFrame
+{
+    
+    if (!_pFormatCtx || !frame.frame || frame.frame->linesize[0] <= 0) {
+        yuvFrame.width = 0;
+        return yuvFrame;
+    }
+    //把数据重新封装成opengl需要的格式
+    AVFrame* pYuv = frame.frame;
+    unsigned int lumaLength= (pYuv->height)*(MIN(pYuv->linesize[0], pYuv->width));
+    unsigned int chromBLength=((pYuv->height)/2)*(MIN(pYuv->linesize[1], (pYuv->width)/2));
+    unsigned int chromRLength=((pYuv->height)/2)*(MIN(pYuv->linesize[2], (pYuv->width)/2));
+    
+    yuvFrame.luma.dataBuffer = malloc(lumaLength);
+    yuvFrame.chromaB.dataBuffer = malloc(chromBLength);
+    yuvFrame.chromaR.dataBuffer = malloc(chromRLength);
+    
+    yuvFrame.width=pYuv->width;
+    yuvFrame.height=pYuv->height;
+    
+    if (pYuv->height <= 0) {
+        free(yuvFrame.luma.dataBuffer);
+        free(yuvFrame.chromaB.dataBuffer);
+        free(yuvFrame.chromaR.dataBuffer);
+        return yuvFrame;
+    }
+    //复制
+    copyDecodedFrame(pYuv->data[0],yuvFrame.luma.dataBuffer,pYuv->linesize[0],
+                     pYuv->width,pYuv->height);
+    copyDecodedFrame(pYuv->data[1], yuvFrame.chromaB.dataBuffer,pYuv->linesize[1],
+                     pYuv->width / 2,pYuv->height / 2);
+    copyDecodedFrame(pYuv->data[2], yuvFrame.chromaR.dataBuffer,pYuv->linesize[2],
+                     pYuv->width / 2,pYuv->height / 2);
+    return yuvFrame;
+    
+}
+
+static void copyDecodedFrame(unsigned char *src, unsigned char *dist,int linesize, int width, int height)
+{
+    width = MIN(linesize, width);
+    if (sizeof(dist) == 0) {
+        return;
+    }
+    for (NSUInteger i = 0; i < height; ++i) {
+        memcpy(dist, src, width);
+        dist += width;
+        src += linesize;
     }
 }
 

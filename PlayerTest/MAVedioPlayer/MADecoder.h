@@ -13,6 +13,8 @@
 #import "swresample.h"
 #import "samplefmt.h"
 #import "YUV_GL_DATA.h"
+#import "MAPacket.h"
+#import "MAFrame.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,7 +34,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)openUrl:(NSString*)path error:(NSError**)error;
 
-- (void)read:(AVPacket*)pkt error:(NSError**)error;
+- (void)read:(MAPacket*)pkt error:(NSError**)error;
+
+- (NSArray*)decodeYUV:(MAPacket*)pkt;
+
+- (NSArray*)decodePCM:(MAPacket*)pkt;
+
+- (H264YUV_Frame)yuvToGlData:(MAFrame*)frame :(H264YUV_Frame)yuvFrame;
 
 @end
 

@@ -57,6 +57,7 @@
 		B77004F421CC88CA00651B86 /* icon_btn_back.png in Resources */ = {isa = PBXBuildFile; fileRef = B77004F221CC88CA00651B86 /* icon_btn_back.png */; };
 		B776AEE321D350F1002C6ED2 /* MAVedioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B776AEE221D350F1002C6ED2 /* MAVedioPlayer.m */; };
 		B776AEE621D37556002C6ED2 /* MAPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = B776AEE521D37556002C6ED2 /* MAPacket.m */; };
+		B79B9ABC21D4793400DDDF2D /* MAFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = B79B9ABB21D4793400DDDF2D /* MAFrame.m */; };
 		B79F3F4821D2006F00066098 /* MAVedioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */; };
 		B7BC4DEB21D0C67700812FB2 /* MADecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BC4DEA21D0C67700812FB2 /* MADecoder.m */; };
 		B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */; };
@@ -254,6 +255,8 @@
 		B776AEE221D350F1002C6ED2 /* MAVedioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAVedioPlayer.m; sourceTree = "<group>"; };
 		B776AEE421D37556002C6ED2 /* MAPacket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAPacket.h; sourceTree = "<group>"; };
 		B776AEE521D37556002C6ED2 /* MAPacket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPacket.m; sourceTree = "<group>"; };
+		B79B9ABA21D4793400DDDF2D /* MAFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAFrame.h; sourceTree = "<group>"; };
+		B79B9ABB21D4793400DDDF2D /* MAFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAFrame.m; sourceTree = "<group>"; };
 		B79F3F4621D2006F00066098 /* MAVedioPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAVedioPlayerViewController.h; sourceTree = "<group>"; };
 		B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAVedioPlayerViewController.m; sourceTree = "<group>"; };
 		B7BC4DE921D0C67700812FB2 /* MADecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADecoder.h; sourceTree = "<group>"; };
@@ -672,6 +675,8 @@
 				B776AEE221D350F1002C6ED2 /* MAVedioPlayer.m */,
 				B776AEE421D37556002C6ED2 /* MAPacket.h */,
 				B776AEE521D37556002C6ED2 /* MAPacket.m */,
+				B79B9ABA21D4793400DDDF2D /* MAFrame.h */,
+				B79B9ABB21D4793400DDDF2D /* MAFrame.m */,
 			);
 			path = MAVedioPlayer;
 			sourceTree = "<group>";
@@ -777,6 +782,7 @@
 				B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */,
 				B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */,
 				B686246A2044E64200FE7C9D /* main.m in Sources */,
+				B79B9ABC21D4793400DDDF2D /* MAFrame.m in Sources */,
 				5A432C132158D5F100928592 /* MCParsedAudioData.m in Sources */,
 				B7CC2A972165F5B300FEDD67 /* MCAudioOutputQueue.m in Sources */,
 				B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */,
