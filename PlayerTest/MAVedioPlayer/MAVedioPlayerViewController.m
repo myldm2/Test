@@ -13,6 +13,7 @@
 @interface MAVedioPlayerViewController ()
 {
     MADecoder* _decoder;
+    UIView* _playView;
 }
 
 @end
@@ -25,6 +26,11 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    
+    _playView = [[UIView alloc]initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 230)];
+    // playView.backgroundColor = [UIColor lightGrayColor];
+    [self.view addSubview:_playView];
+    
     char* realPath = "video.mp4";
     NSString * path0 = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:realPath] ofType:nil];
     
@@ -35,7 +41,7 @@
 //    }
     
     MAVedioPlayer* player = [MAVedioPlayer sharedPlayer];
-    [player openUrl:path0 playerView:self.view];
+    [player openUrl:path0 playerView:_playView];
     [player play];
     
 }

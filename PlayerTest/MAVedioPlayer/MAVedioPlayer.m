@@ -16,11 +16,11 @@
 #import "samplefmt.h"
 #import "YUV_GL_DATA.h"
 #import "MAPacket.h"
-#import "OpenglView.h"
+#import "MAOpenglView.h"
 
 @interface MAVedioPlayer ()
 {
-    OpenglView* gl;
+    MAOpenglView* gl;
 }
 
 @property (nonatomic, strong) MADecoder* decoder;
@@ -59,7 +59,7 @@
 {
     int ret = 0;
     
-    gl = [[OpenglView alloc]initWithFrame:view.frame];
+    gl = [[MAOpenglView alloc]initWithFrame:view.frame];
     if (!gl) {
         NSLog(@"init gl fail...");
         return NO;
@@ -77,83 +77,109 @@
 
 - (void)play
 {
-    [self startPlayThread];
+//    [self startPlayThread];
+    [NSTimer scheduledTimerWithTimeInterval:0.001 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        [self startPlayThread];
+    }];
 }
+
 
 - (void)startPlayThread
 {
-    dispatch_queue_t readQueue = dispatch_queue_create("ReadQueue.MAPlayer.com", DISPATCH_QUEUE_CONCURRENT);
-    dispatch_async(readQueue, ^{
-        MAPacket* pkt = nil;
-        while (!_isExit) {
-            [_lock lock];
-            pkt = [[MAPacket alloc] init];
-            [_decoder read:pkt error:NULL];
-            [_packetBuffer addObject:pkt];
-            [_lock unlock];
-            
-            if (pkt.packet == NULL) {
-                [NSThread sleepForTimeInterval:0.01];
-                continue;
-            }
-            if (pkt.packet->size <= 0) {
-                [NSThread sleepForTimeInterval:0.01];
-                continue;
+    
+    MAPacket* packet = packet = [[MAPacket alloc] init];
+    
+    [_decoder read:packet error:NULL];
+    
+    if (packet) {
+        if (packet.packet->stream_index == _decoder.videoStreamIndex)
+        {
+            NSArray* frames = [_decoder decodeYUV:packet];
+            if (frames.count > 0)
+            {
+                MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frames[0]];
+                [gl displayYUV420pData:yuvFrame];
             }
             
         }
-    });
+    }
     
-    dispatch_queue_t playQueue = dispatch_queue_create("PlayQueue.MAPlayer.com", DISPATCH_QUEUE_CONCURRENT);
-    dispatch_async(playQueue, ^{
-        
-        H264YUV_Frame  yuvFrame;
-        
-        while (!_isExit) {
-            if (_packetBuffer.count == 0) {
-                [NSThread sleepForTimeInterval:0.01];
-                NSLog(@"0000000000000000000000");
-                continue;
-            }
-            
-            [_lock lock];
-            MAPacket * packet = [_packetBuffer lastObject];
-            [_packetBuffer removeLastObject];
-            if (packet) {
-                if (packet.packet->stream_index == _decoder.videoStreamIndex)
-                {
-                    NSArray* yuvFrames = [_decoder decodeYUV:packet];
-                    if (yuvFrames.count > 0)
-                    {
-                        MAFrame* frame = yuvFrames[0];
-                        memset(&yuvFrame, 0, sizeof(H264YUV_Frame));
-                        yuvFrame = [_decoder yuvToGlData:frame :yuvFrame];
-//                        if (yuvFrame.width == 0) {
-//
-//                            continue;
-//                        }
-                    }
 
-                    NSLog(@"mayinglun log: vedio frames:%ld", yuvFrames.count);
-                }
-            }
-            [_lock unlock];
-            
-//            if (yuvFrame.width != 0)
+    
+    
+//    dispatch_queue_t readQueue = dispatch_queue_create("ReadQueue.MAPlayer.com", DISPATCH_QUEUE_CONCURRENT);
+//    dispatch_async(readQueue, ^{
+//        MAPacket* pkt = nil;
+//        while (!_isExit) {
+//            [_lock lock];
+//            pkt = [[MAPacket alloc] init];
+//            [_decoder read:pkt error:NULL];
+//            [_packetBuffer addObject:pkt];
+//            [_lock unlock];
+//
+//            if (pkt.packet == NULL) {
+//                [NSThread sleepForTimeInterval:0.01];
+//                continue;
+//            }
+//            if (pkt.packet->size <= 0) {
+//                [NSThread sleepForTimeInterval:0.01];
+//                continue;
+//            }
+//
+//        }
+//    });
+//
+//    dispatch_queue_t playQueue = dispatch_queue_create("PlayQueue.MAPlayer.com", DISPATCH_QUEUE_CONCURRENT);
+//    dispatch_async(playQueue, ^{
+//
+//        while (!_isExit) {
+//            if (_packetBuffer.count == 0) {
+//                [NSThread sleepForTimeInterval:0.01];
+//                NSLog(@"0000000000000000000000");
+//                continue;
+//            }
+//
+//            MAYUVFrame* yuvFrame = nil;
+//
+//            [_lock lock];
+//            MAPacket * packet = [_packetBuffer lastObject];
+//            [_packetBuffer removeLastObject];
+//            if (packet) {
+//                if (packet.packet->stream_index == _decoder.videoStreamIndex)
+//                {
+//                    NSArray* frames = [_decoder decodeYUV:packet];
+//                    if (frames.count > 0)
+//                    {
+//                        yuvFrame = [_decoder yuvToGlData:frames[0]];
+////                        if (yuvFrame.width == 0) {
+////
+////                            continue;
+////                        }
+//                    }
+//
+//                }
+//            }
+//            [_lock unlock];
+//
+//
+//
+//            if (yuvFrame)
 //            {
 //                dispatch_async(dispatch_get_main_queue(), ^{
 //                    // [self.imageView setImage:image];
 //                    // playView.backgroundColor = color;
-//                    [gl displayYUV420pData:(H264YUV_Frame*)&yuvFrame];
+//                    [gl displayYUV420pData:yuvFrame];
 ////                    free(yuvFrame.luma.dataBuffer);
 ////                    free(yuvFrame.chromaB.dataBuffer);
 ////                    free(yuvFrame.chromaR.dataBuffer);
+//
 //                });
+//                break;
 //            }
-            
-            
-        }
-    });
+//
+//
+//        }
+//    });
 }
 
 @end

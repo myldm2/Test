@@ -150,12 +150,12 @@
             if (re == 0) {
                 [frames addObject:frame];
                 
-                if (!frame.frame || frame.frame->linesize[0] <= 0)
-                {
-                    NSLog(@"mayinglun log: frame 解析失败");
-                } else {
-                    NSLog(@"mayinglun log: frame 解析成功");
-                }
+//                if (!frame.frame || frame.frame->linesize[0] <= 0)
+//                {
+//                    NSLog(@"mayinglun log: frame 解析失败");
+//                } else {
+//                    NSLog(@"mayinglun log: frame 解析成功");
+//                }
                 
             }
         }
@@ -221,39 +221,43 @@
 //    return nil;
 //}
 
-- (H264YUV_Frame)yuvToGlData:(MAFrame*)frame :(H264YUV_Frame)yuvFrame
+- (MAYUVFrame*)yuvToGlData:(MAFrame*)frame
 {
-    
-    if (!_pFormatCtx || !frame.frame || frame.frame->linesize[0] <= 0) {
-        yuvFrame.width = 0;
-        return yuvFrame;
+    if (!_pFormatCtx || !frame.frame || frame.frame->linesize[0] <= 0 || frame.frame->width <= 0 || frame.frame->height <= 0) {
+        return nil;
     }
+    
+    MAYUVFrame* yuvFrame = [[MAYUVFrame alloc] init];
+    
     //把数据重新封装成opengl需要的格式
     AVFrame* pYuv = frame.frame;
     unsigned int lumaLength= (pYuv->height)*(MIN(pYuv->linesize[0], pYuv->width));
     unsigned int chromBLength=((pYuv->height)/2)*(MIN(pYuv->linesize[1], (pYuv->width)/2));
     unsigned int chromRLength=((pYuv->height)/2)*(MIN(pYuv->linesize[2], (pYuv->width)/2));
     
-    yuvFrame.luma.dataBuffer = malloc(lumaLength);
-    yuvFrame.chromaB.dataBuffer = malloc(chromBLength);
-    yuvFrame.chromaR.dataBuffer = malloc(chromRLength);
+    yuvFrame.width = pYuv->width;
+    yuvFrame.height = pYuv->height;
     
-    yuvFrame.width=pYuv->width;
-    yuvFrame.height=pYuv->height;
-    
-    if (pYuv->height <= 0) {
-        free(yuvFrame.luma.dataBuffer);
-        free(yuvFrame.chromaB.dataBuffer);
-        free(yuvFrame.chromaR.dataBuffer);
-        return yuvFrame;
-    }
+    unsigned char* luma = malloc(lumaLength);
+    unsigned char* chromaB = malloc(chromBLength);
+    unsigned char* chromaR = malloc(chromRLength);
+
     //复制
-    copyDecodedFrame(pYuv->data[0],yuvFrame.luma.dataBuffer,pYuv->linesize[0],
+    copyDecodedFrame(pYuv->data[0],luma,pYuv->linesize[0],
                      pYuv->width,pYuv->height);
-    copyDecodedFrame(pYuv->data[1], yuvFrame.chromaB.dataBuffer,pYuv->linesize[1],
+    copyDecodedFrame(pYuv->data[1], chromaB, pYuv->linesize[1],
                      pYuv->width / 2,pYuv->height / 2);
-    copyDecodedFrame(pYuv->data[2], yuvFrame.chromaR.dataBuffer,pYuv->linesize[2],
+    copyDecodedFrame(pYuv->data[2], chromaR, pYuv->linesize[2],
                      pYuv->width / 2,pYuv->height / 2);
+    
+    yuvFrame.luma = [NSData dataWithBytes:luma length:lumaLength];
+    yuvFrame.chromaB = [NSData dataWithBytes:chromaB length:chromBLength];
+    yuvFrame.chromaR = [NSData dataWithBytes:chromaR length:chromRLength];
+    
+    free(luma);
+    free(chromaB);
+    free(chromaR);
+    
     return yuvFrame;
     
 }

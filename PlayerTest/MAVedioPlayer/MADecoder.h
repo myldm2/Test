@@ -15,6 +15,7 @@
 #import "YUV_GL_DATA.h"
 #import "MAPacket.h"
 #import "MAFrame.h"
+#import "MAYUVFrame.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray*)decodePCM:(MAPacket*)pkt;
 
-- (H264YUV_Frame)yuvToGlData:(MAFrame*)frame :(H264YUV_Frame)yuvFrame;
+- (MAYUVFrame*)yuvToGlData:(MAFrame*)frame;
 
 @end
 
