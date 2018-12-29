@@ -118,21 +118,24 @@
     }
 }
 
-- (void)read:(MAPacket*)pkt error:(NSError**)error
+- (BOOL)read:(MAPacket*)pkt
 {
     av_packet_unref(pkt.packet);
     if (!_pFormatCtx) {
-        return;
+        return NO;
     }
-    int err = av_read_frame(_pFormatCtx, pkt.packet);
-//    if (err != 0)
-//    {
-//        NSLog(@"1");
-////        av_strerror(err, , <#size_t errbuf_size#>)
-//    } else {
-//        NSLog(@"==============data===============");
-//        NSLog(@"%d", pkt.packet->size);
-//    }
+    BOOL success = NO;
+    AVPacket* packet = av_packet_alloc();
+    if (av_read_frame(_pFormatCtx, packet) == 0)
+    {
+        if ([pkt receivePacketData:packet])
+        {
+            success = YES;
+        }
+        av_packet_unref(packet);
+    }
+    av_packet_free(&packet);
+    return success;
 }
 
 - (NSArray*)decodeYUV:(MAPacket*)pkt
@@ -273,6 +276,15 @@ static void copyDecodedFrame(unsigned char *src, unsigned char *dist,int linesiz
         dist += width;
         src += linesize;
     }
+}
+
+- (void)dealloc
+{
+    if (_pFormatCtx) {
+        avformat_close_input(&_pFormatCtx);
+    }
+    avcodec_close(_pVideoCodecCtx);
+    avcodec_close(_pAudioCodecCtx);
 }
 
 @end

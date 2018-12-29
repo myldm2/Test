@@ -19,10 +19,30 @@
     return self;
 }
 
+- (BOOL)receivePacketData:(AVPacket*)packet
+{
+    if (packet)
+    {
+        [self releasePacketData];
+        return av_packet_ref(_packet, packet) == 0;
+    } else {
+        return NO;
+    }
+}
+
+- (void)releasePacketData
+{
+    if (_packet)
+    {
+        av_packet_unref(_packet);
+    }
+}
+
 - (void)dealloc
 {
     if (_packet)
     {
+        av_packet_unref(_packet);
         av_packet_free(&_packet);
         _packet = NULL;
     }

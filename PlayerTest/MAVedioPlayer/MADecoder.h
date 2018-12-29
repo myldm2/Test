@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)openUrl:(NSString*)path error:(NSError**)error;
 
-- (void)read:(MAPacket*)pkt error:(NSError**)error;
+- (BOOL)read:(MAPacket*)pkt;
 
 - (NSArray*)decodeYUV:(MAPacket*)pkt;
 

@@ -89,20 +89,23 @@
     
     MAPacket* packet = packet = [[MAPacket alloc] init];
     
-    [_decoder read:packet error:NULL];
-    
-    if (packet) {
-        if (packet.packet->stream_index == _decoder.videoStreamIndex)
-        {
-            NSArray* frames = [_decoder decodeYUV:packet];
-            if (frames.count > 0)
+    if ([_decoder read:packet])
+    {
+        if (packet) {
+            if (packet.packet->stream_index == _decoder.videoStreamIndex)
             {
-                MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frames[0]];
-                [gl displayYUV420pData:yuvFrame];
+                NSArray* frames = [_decoder decodeYUV:packet];
+                if (frames.count > 0)
+                {
+                    MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frames[0]];
+                    [gl displayYUV420pData:yuvFrame];
+                }
+                
             }
-            
         }
     }
+    
+    
     
 
     

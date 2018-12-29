@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) AVPacket* packet;
 
+- (BOOL)receivePacketData:(AVPacket*)packet;
+
+- (void)releasePacketData;
+
 @end
 
 NS_ASSUME_NONNULL_END
