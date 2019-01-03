@@ -137,17 +137,23 @@ enum TextureType
 {
     [super layoutSubviews];
     
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        
-        @synchronized (self) {
-            [EAGLContext setCurrentContext:_glContext];
-            [self destoryFrameAndRanderBuffer];
-            [self createFrameAndRanderBuffer];
-        }
-        
-        glViewport(1, 1, self.bounds.size.width*_viewScale - 2, self.bounds.size.height*_viewScale - 2);
-        
-    });
+    [EAGLContext setCurrentContext:_glContext];
+    [self destoryFrameAndRanderBuffer];
+    [self createFrameAndRanderBuffer];
+    glViewport(1, 1, self.bounds.size.width*_viewScale - 2, self.bounds.size.height*_viewScale - 2);
+    
+    
+//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//
+//        @synchronized (self) {
+//            [EAGLContext setCurrentContext:_glContext];
+//            [self destoryFrameAndRanderBuffer];
+//            [self createFrameAndRanderBuffer];
+//        }
+//
+//        glViewport(1, 1, self.bounds.size.width*_viewScale - 2, self.bounds.size.height*_viewScale - 2);
+//
+//    });
     
 }
 

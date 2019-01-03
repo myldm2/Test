@@ -240,6 +240,7 @@
     
     yuvFrame.width = pYuv->width;
     yuvFrame.height = pYuv->height;
+    yuvFrame.pts = pYuv->pts;
     
     unsigned char* luma = malloc(lumaLength);
     unsigned char* chromaB = malloc(chromBLength);
@@ -280,11 +281,13 @@ static void copyDecodedFrame(unsigned char *src, unsigned char *dist,int linesiz
 
 - (void)dealloc
 {
+    [_lock lock];
     if (_pFormatCtx) {
         avformat_close_input(&_pFormatCtx);
     }
     avcodec_close(_pVideoCodecCtx);
     avcodec_close(_pAudioCodecCtx);
+    [_lock unlock];
 }
 
 @end

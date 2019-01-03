@@ -17,16 +17,23 @@
 #import "YUV_GL_DATA.h"
 #import "MAPacket.h"
 #import "MAOpenglView.h"
+#import "MADecodeOperation.h"
 
 @interface MAVedioPlayer ()
 {
-    MAOpenglView* gl;
+    MAOpenglView* _gl;
+    uint64_t _timeIndex;
 }
 
 @property (nonatomic, strong) MADecoder* decoder;
 @property (nonatomic, strong) NSLock* lock;
 @property (nonatomic, assign) BOOL isExit;
 @property (nonatomic, strong) NSMutableArray* packetBuffer;
+
+@property (nonatomic, strong) MADecodeOperation* decodeOperation;
+@property (nonatomic, strong) NSOperationQueue* decodeQueue;
+
+@property (nonatomic, strong) CADisplayLink* displayLink;
 
 
 
@@ -48,9 +55,9 @@
 {
     self = [super init];
     if (self) {
-        _decoder = [[MADecoder alloc] init];
         _lock = [[NSLock alloc] init];
         _packetBuffer = [NSMutableArray array];
+        _decodeQueue = [[NSOperationQueue alloc] init];
     }
     return self;
 }
@@ -59,13 +66,17 @@
 {
     int ret = 0;
     
-    gl = [[MAOpenglView alloc]initWithFrame:view.frame];
-    if (!gl) {
+    _gl = [[MAOpenglView alloc]initWithFrame:view.frame];
+    if (!_gl) {
         NSLog(@"init gl fail...");
         return NO;
     }
-    [gl setVideoSize:view.frame.size.width height:view.frame.size.height];
-    [view addSubview:gl];
+    [_gl setVideoSize:view.frame.size.width height:view.frame.size.height];
+    [view addSubview:_gl];
+    
+    if (!_decoder) {
+        _decoder = [[MADecoder alloc] init];
+    }
     
     NSError* error;
     if (![_decoder openUrl:url error:&error])
@@ -78,32 +89,58 @@
 - (void)play
 {
 //    [self startPlayThread];
-    [NSTimer scheduledTimerWithTimeInterval:0.001 repeats:YES block:^(NSTimer * _Nonnull timer) {
+
+    [self startDecodeQueue];
+    
+    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayAction:)];
+    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
         [self startPlayThread];
     }];
+}
+
+- (void)startDecodeQueue
+{
+    if (!_decodeOperation)
+    {
+        _decodeOperation = [[MADecodeOperation alloc] initWithDecoder: _decoder];
+    }
+    if (!_decodeQueue)
+    {
+        _decodeQueue = [[NSOperationQueue alloc] init];
+    }
+    [_decodeQueue addOperation:_decodeOperation];
 }
 
 
 - (void)startPlayThread
 {
     
-    MAPacket* packet = packet = [[MAPacket alloc] init];
-    
-    if ([_decoder read:packet])
-    {
-        if (packet) {
-            if (packet.packet->stream_index == _decoder.videoStreamIndex)
-            {
-                NSArray* frames = [_decoder decodeYUV:packet];
-                if (frames.count > 0)
-                {
-                    MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frames[0]];
-                    [gl displayYUV420pData:yuvFrame];
-                }
-                
-            }
-        }
+    MAYUVFrame* yuvFrame = [_decodeOperation.yuvFrameBuffer pop];
+    if (yuvFrame) {
+        [_gl displayYUV420pData:yuvFrame];
     }
+    
+    
+//    MAPacket* packet = packet = [[MAPacket alloc] init];
+//
+//    if ([_decoder read:packet])
+//    {
+//        if (packet) {
+//            if (packet.packet->stream_index == _decoder.videoStreamIndex)
+//            {
+//                NSArray* frames = [_decoder decodeYUV:packet];
+//                if (frames.count > 0)
+//                {
+//                    MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frames[0]];
+//                    [_gl displayYUV420pData:yuvFrame];
+//                }
+//
+//            }
+//        }
+//    }
     
     
     
@@ -183,6 +220,21 @@
 //
 //        }
 //    });
+}
+
+- (void)displayAction:(CADisplayLink*)displayLink
+{
+    ino64_t timeInterval = AV_TIME_BASE / 60;
+    _timeIndex += timeInterval;
+    
+}
+
+- (void)stop
+{
+    [_decodeOperation cancel];
+    _decodeOperation = nil;
+    _decodeQueue = nil;
+    _decoder = nil;
 }
 
 @end

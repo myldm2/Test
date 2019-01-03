@@ -34,26 +34,15 @@
     char* realPath = "video.mp4";
     NSString * path0 = [[NSBundle mainBundle] pathForResource:[NSString stringWithUTF8String:realPath] ofType:nil];
     
-//    _decoder = [[MADecoder alloc] init];
-//    if (![_decoder openUrl:path0 error:nil])
-//    {
-//        NSLog(@"open vedio source failed");
-//    }
-    
     MAVedioPlayer* player = [MAVedioPlayer sharedPlayer];
     [player openUrl:path0 playerView:_playView];
     [player play];
     
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)dealloc
+{
+    [[MAVedioPlayer sharedPlayer] stop];
 }
-*/
 
 @end

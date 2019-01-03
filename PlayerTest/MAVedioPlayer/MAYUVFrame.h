@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSData* luma;
 @property (nonatomic, strong) NSData* chromaB;
 @property (nonatomic, strong) NSData* chromaR;
+@property (nonatomic, assign) int64_t pts;
 
 @end
 
