@@ -18,6 +18,7 @@
 #import "MAPacket.h"
 #import "MAOpenglView.h"
 #import "MADecodeOperation.h"
+#import "MATimer.h"
 
 @interface MAVedioPlayer ()
 {
@@ -34,6 +35,7 @@
 @property (nonatomic, strong) NSOperationQueue* decodeQueue;
 
 @property (nonatomic, strong) CADisplayLink* displayLink;
+@property (nonatomic, strong) MATimer* timer;
 
 
 
@@ -92,8 +94,11 @@
 
     [self startDecodeQueue];
     
-    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayAction:)];
-    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayAction:)];
+//    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    
+    _timer = [[MATimer alloc] init];
+    [_timer fire];
     
     
     [NSTimer scheduledTimerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
