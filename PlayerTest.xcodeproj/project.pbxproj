@@ -63,6 +63,7 @@
 		B78163F321D6011500EDAC94 /* MAOpenglView.m in Sources */ = {isa = PBXBuildFile; fileRef = B78163F221D6011500EDAC94 /* MAOpenglView.m */; };
 		B79B9ABC21D4793400DDDF2D /* MAFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = B79B9ABB21D4793400DDDF2D /* MAFrame.m */; };
 		B79F3F4821D2006F00066098 /* MAVedioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */; };
+		B7A4364021E89213007A81E4 /* MAOutPutFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A4363F21E89213007A81E4 /* MAOutPutFrame.m */; };
 		B7B3118B21DDA05E0088C746 /* MADecodeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B7B3118A21DDA05E0088C746 /* MADecodeOperation.m */; };
 		B7BC4DEB21D0C67700812FB2 /* MADecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BC4DEA21D0C67700812FB2 /* MADecoder.m */; };
 		B7CC2A9421636E4E00FEDD67 /* MCAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC2A9321636E4E00FEDD67 /* MCAudioFileStream.m */; };
@@ -273,6 +274,8 @@
 		B79B9ABB21D4793400DDDF2D /* MAFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAFrame.m; sourceTree = "<group>"; };
 		B79F3F4621D2006F00066098 /* MAVedioPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAVedioPlayerViewController.h; sourceTree = "<group>"; };
 		B79F3F4721D2006F00066098 /* MAVedioPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAVedioPlayerViewController.m; sourceTree = "<group>"; };
+		B7A4363E21E89213007A81E4 /* MAOutPutFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAOutPutFrame.h; sourceTree = "<group>"; };
+		B7A4363F21E89213007A81E4 /* MAOutPutFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAOutPutFrame.m; sourceTree = "<group>"; };
 		B7B3118921DDA05E0088C746 /* MADecodeOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADecodeOperation.h; sourceTree = "<group>"; };
 		B7B3118A21DDA05E0088C746 /* MADecodeOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADecodeOperation.m; sourceTree = "<group>"; };
 		B7BC4DE921D0C67700812FB2 /* MADecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADecoder.h; sourceTree = "<group>"; };
@@ -695,6 +698,8 @@
 				B776AEE521D37556002C6ED2 /* MAPacket.m */,
 				B79B9ABA21D4793400DDDF2D /* MAFrame.h */,
 				B79B9ABB21D4793400DDDF2D /* MAFrame.m */,
+				B7A4363E21E89213007A81E4 /* MAOutPutFrame.h */,
+				B7A4363F21E89213007A81E4 /* MAOutPutFrame.m */,
 				B78163EE21D5FB3200EDAC94 /* MAYUVFrame.h */,
 				B78163EF21D5FB3200EDAC94 /* MAYUVFrame.m */,
 				B770F47721E5E6E800A65F73 /* MAPCMFrame.h */,
@@ -823,6 +828,7 @@
 				B7CC2A9D2166525200FEDD67 /* NSTimer+BlocksSupport.m in Sources */,
 				B7540B9121D7499A00E1DD0A /* MAFrameBuffer.m in Sources */,
 				B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */,
+				B7A4364021E89213007A81E4 /* MAOutPutFrame.m in Sources */,
 				B7D3994C21732D9500AF3DA8 /* AudioViewController.m in Sources */,
 				B7D32AFF21605C5600E55325 /* MCAudioFile.m in Sources */,
 				B6B3EABF204FBA810050C67E /* TestOne.m in Sources */,

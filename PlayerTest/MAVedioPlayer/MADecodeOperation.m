@@ -56,8 +56,8 @@
                         
                         if (_delegate && [_delegate respondsToSelector:@selector(decodeOperation: decodeYUVFrom: to:)])
                         {
-                            MAYUVFrame* firstFrame = _yuvFrameBuffer.fristFrame;
-                            MAYUVFrame* lastFrame = _yuvFrameBuffer.lastFrame;
+                            MAYUVFrame* firstFrame = (MAYUVFrame*)_yuvFrameBuffer.fristFrame;
+                            MAYUVFrame* lastFrame = (MAYUVFrame*)_yuvFrameBuffer.lastFrame;
 //                            NSLog(@"frame.pts:%llu", firstFrame.pts);
 //                            NSLog(@"frame.pts:%@", yuvFrame);
 //                            NSLog(@"frame.pts:%@", lastFrame);
@@ -71,15 +71,15 @@
                     NSArray* frames = [_decoder decodePCM:packet];
                     for (MAFrame* frame in frames) {
                         
-//                        MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frame];
-//                        [_yuvFrameBuffer push:yuvFrame];
-//                        
-//                        if (_delegate && [_delegate respondsToSelector:@selector(decodeOperation: decodeYUVFrom: to:)])
-//                        {
-//                            MAYUVFrame* firstFrame = _yuvFrameBuffer.fristFrame;
-//                            MAYUVFrame* lastFrame = _yuvFrameBuffer.lastFrame;
-//                            [_delegate decodeOperation:self decodeYUVFrom:firstFrame.presentTime to:lastFrame.presentTime];
-//                        }
+                        MAPCMFrame* pcmFrame = [_decoder toPCMFrameData:frame];
+                        [_pcmFrameBuffer push:pcmFrame];
+                        
+                        if (_delegate && [_delegate respondsToSelector:@selector(decodeOperation: decodeYUVFrom: to:)])
+                        {
+                            MAPCMFrame* firstFrame = (MAPCMFrame*)_pcmFrameBuffer.fristFrame;
+                            MAPCMFrame* lastFrame = (MAPCMFrame*)_pcmFrameBuffer.lastFrame;
+                            [_delegate decodeOperation:self decodePCMFrom:firstFrame.presentTime to:lastFrame.presentTime];
+                        }
                         
                     }
                 }

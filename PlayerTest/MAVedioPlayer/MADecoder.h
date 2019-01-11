@@ -16,8 +16,11 @@
 #import "MAPacket.h"
 #import "MAFrame.h"
 #import "MAYUVFrame.h"
+#import "MAPCMFrame.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+#define CHANNEL     2
 
 @interface MADecoder : NSObject
 
@@ -42,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray*)decodePCM:(MAPacket*)pkt;
 
 - (MAYUVFrame*)yuvToGlData:(MAFrame*)frame;
+
+- (MAPCMFrame*)toPCMFrameData:(MAFrame*)frame;
 
 @end
 

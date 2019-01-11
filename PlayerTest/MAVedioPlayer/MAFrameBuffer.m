@@ -26,7 +26,7 @@
     return self;
 }
 
-- (void)push:(MAYUVFrame *)frame
+- (void)push:(MAOutPutFrame *)frame
 {
     if (_multithreadProtection)
     {
@@ -39,12 +39,12 @@
     }
 }
 
-- (void)_push:(MAYUVFrame *)frame
+- (void)_push:(MAOutPutFrame *)frame
 {
     [_frames addObject: frame];
 }
 
-- (void)pushFrames:(NSArray<MAYUVFrame*> *)frames
+- (void)pushFrames:(NSArray<MAOutPutFrame*> *)frames
 {
     if (_multithreadProtection)
     {
@@ -57,14 +57,14 @@
     }
 }
 
-- (void)_pushFrames:(NSArray<MAYUVFrame*> *)frames
+- (void)_pushFrames:(NSArray<MAOutPutFrame*> *)frames
 {
     [_frames addObjectsFromArray:frames];
 }
 
-- (MAYUVFrame *)pop
+- (MAOutPutFrame *)pop
 {
-    __block MAYUVFrame *frame;
+    __block MAOutPutFrame *frame;
     if (_multithreadProtection)
     {
 //        dispatch_barrier_async(_queue, ^{
@@ -77,9 +77,9 @@
     return frame;
 }
 
-- (MAYUVFrame *)_pop
+- (MAOutPutFrame *)_pop
 {
-    MAYUVFrame *frame = nil;
+    MAOutPutFrame *frame = nil;
     if (_frames.count > 0)
     {
         frame = _frames[0];
@@ -88,9 +88,9 @@
     return frame;
 }
 
-- (NSArray<MAYUVFrame *> *)popAll
+- (NSArray<MAOutPutFrame *> *)popAll
 {
-    __block NSArray<MAYUVFrame *> * frames;
+    __block NSArray<MAOutPutFrame *> * frames;
     if (_multithreadProtection)
     {
 //        dispatch_barrier_async(_queue, ^{
@@ -103,9 +103,9 @@
     return frames;
 }
 
-- (NSArray<MAYUVFrame *> *)_popAll
+- (NSArray<MAOutPutFrame *> *)_popAll
 {
-    NSArray<MAYUVFrame *> * frames;
+    NSArray<MAOutPutFrame *> * frames;
     if (_frames.count > 0)
     {
         frames = [NSArray arrayWithArray:_frames];
@@ -114,9 +114,9 @@
     return frames;
 }
 
-- (MAYUVFrame*)fristFrame
+- (MAOutPutFrame*)fristFrame
 {
-    __block MAYUVFrame *frame;
+    __block MAOutPutFrame *frame;
     if (_multithreadProtection)
     {
         dispatch_sync(_queue, ^{
@@ -128,9 +128,9 @@
     return frame;
 }
 
-- (MAYUVFrame *)_fristFrame
+- (MAOutPutFrame *)_fristFrame
 {
-    MAYUVFrame *frame = nil;
+    MAOutPutFrame *frame = nil;
     if (_frames.count > 0)
     {
         frame = _frames[0];
@@ -138,9 +138,9 @@
     return frame;
 }
 
-- (MAYUVFrame*)lastFrame
+- (MAOutPutFrame*)lastFrame
 {
-    __block MAYUVFrame *frame;
+    __block MAOutPutFrame *frame;
     if (_multithreadProtection)
     {
         dispatch_sync(_queue, ^{
@@ -152,9 +152,9 @@
     return frame;
 }
 
-- (MAYUVFrame *)_lastFrame
+- (MAOutPutFrame *)_lastFrame
 {
-    MAYUVFrame *frame = nil;
+    MAOutPutFrame *frame = nil;
     frame = [_frames lastObject];
     return frame;
 }

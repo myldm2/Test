@@ -77,9 +77,7 @@
     [_gl setVideoSize:view.frame.size.width height:view.frame.size.height];
     [view addSubview:_gl];
     
-    if (!_decoder) {
-        _decoder = [[MADecoder alloc] init];
-    }
+     _decoder = [[MADecoder alloc] init];
     
     NSError* error;
     if (![_decoder openUrl:url error:&error])
@@ -130,7 +128,7 @@
 
 - (void)startPlayThread
 {
-    MAYUVFrame* yuvFrame = [_decodeOperation.yuvFrameBuffer pop];
+    MAYUVFrame* yuvFrame = (MAYUVFrame*)[_decodeOperation.yuvFrameBuffer pop];
     if (yuvFrame) {
         [_gl displayYUV420pData:yuvFrame];
     }
@@ -160,7 +158,7 @@
     BOOL success = NO;
     
 //    NSLog(@"count3:%ld", _frameBuffer.count);
-    MAYUVFrame* firstFrame = [_yuvFrameBuffer fristFrame];
+    MAYUVFrame* firstFrame = (MAYUVFrame*)[_yuvFrameBuffer fristFrame];
     
 //    NSLog(@"mayinglun log: time1:%llu  time2:%llu  frame:%llu", time1, time2, firstFrame.pts);
     
@@ -170,10 +168,10 @@
             break;
         } else if (firstFrame.presentTime < time1) {
             [_yuvFrameBuffer pop];
-            firstFrame = _yuvFrameBuffer.fristFrame;
+            firstFrame = (MAYUVFrame*)_yuvFrameBuffer.fristFrame;
             continue;
         } else {
-            MAYUVFrame* yuvFrame = [_yuvFrameBuffer pop];
+            MAYUVFrame* yuvFrame = (MAYUVFrame*)[_yuvFrameBuffer pop];
             if (yuvFrame) {
                 [_gl displayYUV420pData:yuvFrame];
                 success = YES;
@@ -184,15 +182,20 @@
     return success;
 }
 
-- (void)decodeFrom:(uint64_t)start to:(uint64_t)end
+- (void)decodeOperation:(MADecodeOperation*)operation decodeYUVFrom:(uint64_t)start to:(uint64_t)end
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray* frames = [_decodeOperation.yuvFrameBuffer popAll];
 //        NSLog(@"count1:%ld", _frameBuffer.count);
         [_yuvFrameBuffer pushFrames:frames];
-//        NSLog(@"count2:%ld", _frameBuffer.count);
+//        NSLog(@"count2:%ld", _yuvFrameBuffer.count);
 //        NSLog(@"count2:%ld  %ld", (long)_frameBuffer.count, frames.count);
     });
+}
+
+- (void)decodeOperation:(MADecodeOperation*)operation decodePCMFrom:(uint64_t)start to:(uint64_t)end
+{
+    
 }
 
 @end

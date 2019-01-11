@@ -6,19 +6,17 @@
 //  Copyright © 2018 baiyang. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "MAOutPutFrame.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MAYUVFrame : NSObject
+@interface MAYUVFrame : MAOutPutFrame
 
 @property (nonatomic, assign) int width;
 @property (nonatomic, assign) int height;
 @property (nonatomic, strong) NSData* luma;
 @property (nonatomic, strong) NSData* chromaB;
 @property (nonatomic, strong) NSData* chromaR;
-@property (nonatomic, assign) int64_t pts;
-@property (nonatomic, assign) uint64_t presentTime;
 
 @end
 

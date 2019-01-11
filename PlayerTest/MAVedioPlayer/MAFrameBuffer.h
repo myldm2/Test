@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MAPacket.h"
-#import "MAYUVFrame.h"
+#import "MAOutPutFrame.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,17 +16,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithMultithreadProtection:(BOOL)multithreadProtection;
 
-- (void)push:(MAYUVFrame *)frame;
+- (void)push:(MAOutPutFrame *)frame;
 
-- (void)pushFrames:(NSArray<MAYUVFrame*> *)frames;
+- (void)pushFrames:(NSArray<MAOutPutFrame*> *)frames;
 
-- (MAYUVFrame *)pop;
+- (MAOutPutFrame *)pop;
 
-- (NSArray<MAYUVFrame *> *)popAll;
+- (NSArray<MAOutPutFrame *> *)popAll;
 
-- (MAYUVFrame*)fristFrame;
+- (MAOutPutFrame*)fristFrame;
 
-- (MAYUVFrame*)lastFrame;
+- (MAOutPutFrame*)lastFrame;
 
 - (NSInteger)count;
 

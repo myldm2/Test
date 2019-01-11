@@ -21,6 +21,8 @@
     AVCodec           * _pVideoCodec; //视频解码器
     AVCodec           * _pAudioCodec; //音频解码器
     
+    SwrContext        * _pSwrCtx;
+    
 }
 
 @end
@@ -104,6 +106,19 @@
             NSLog(@"mayinglun log: sample_rate:%d", _audioChannels);
         }
         
+    }
+    
+    if (_pSwrCtx == NULL) {
+        _pSwrCtx = swr_alloc();
+        swr_alloc_set_opts(_pSwrCtx,
+                           AV_CH_LAYOUT_STEREO,//2声道立体声
+                           AV_SAMPLE_FMT_S16,  //采样大小 16位
+                           _audioSampleRate,        //采样率
+                           _pAudioCodecCtx->channel_layout,
+                           _pAudioCodecCtx->sample_fmt,// 样本类型
+                           _pAudioCodecCtx->sample_rate,
+                           0, 0);
+        swr_init(_pSwrCtx);
     }
 
     [_lock unlock];
@@ -260,6 +275,38 @@
     
     return yuvFrame;
     
+}
+
+- (MAPCMFrame*)toPCMFrameData:(MAFrame*)frame
+{
+    if (!_pFormatCtx || !frame.frame || !_pSwrCtx) {
+        return nil;
+    }
+    uint64_t bufferLength = 10000;
+    char* dataBuf = malloc(bufferLength);
+    uint8_t * data[1];
+    data[0] = (uint8_t*)dataBuf;
+    int len = swr_convert(_pSwrCtx, data, 10000, (const uint8_t**)frame.frame->data, frame.frame->nb_samples);
+    
+    if (len < 0) {
+        free(dataBuf);
+        return nil;
+    } else
+    {
+        len = av_samples_get_buffer_size(NULL,
+                                                 CHANNEL,
+                                                 len,
+                                                 AV_SAMPLE_FMT_S16, 0);
+        MAPCMFrame* pcmFrame = [[MAPCMFrame alloc] init];
+        pcmFrame.pcm = [NSData dataWithBytes:dataBuf length:len];
+        pcmFrame.presentTime = frame.presentTime;
+        pcmFrame.pts = frame.frame->pts;
+        pcmFrame.sampleRate = _audioSampleRate;
+        pcmFrame.sampleSize = _audioSampleSize;
+        pcmFrame.channel = CHANNEL;
+        free(dataBuf);
+        return pcmFrame;
+    }
 }
 
 - (double)r2d:(AVRational)r{
