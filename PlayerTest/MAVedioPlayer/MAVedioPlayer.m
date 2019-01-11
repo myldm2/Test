@@ -19,8 +19,9 @@
 #import "MAOpenglView.h"
 #import "MADecodeOperation.h"
 #import "MATimer.h"
+#import "MAFrameBuffer.h"
 
-@interface MAVedioPlayer ()
+@interface MAVedioPlayer () <MATimerDelegate, MADecodeOperationDelegate>
 {
     MAOpenglView* _gl;
     uint64_t _timeIndex;
@@ -29,13 +30,13 @@
 @property (nonatomic, strong) MADecoder* decoder;
 @property (nonatomic, strong) NSLock* lock;
 @property (nonatomic, assign) BOOL isExit;
-@property (nonatomic, strong) NSMutableArray* packetBuffer;
 
 @property (nonatomic, strong) MADecodeOperation* decodeOperation;
 @property (nonatomic, strong) NSOperationQueue* decodeQueue;
 
 @property (nonatomic, strong) CADisplayLink* displayLink;
 @property (nonatomic, strong) MATimer* timer;
+@property (nonatomic, strong) MAFrameBuffer* yuvFrameBuffer;
 
 
 
@@ -58,8 +59,8 @@
     self = [super init];
     if (self) {
         _lock = [[NSLock alloc] init];
-        _packetBuffer = [NSMutableArray array];
         _decodeQueue = [[NSOperationQueue alloc] init];
+        _yuvFrameBuffer = [[MAFrameBuffer alloc] initWithMultithreadProtection:NO];
     }
     return self;
 }
@@ -97,13 +98,19 @@
 //    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayAction:)];
 //    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
-    _timer = [[MATimer alloc] init];
-    [_timer fire];
+    if (!_timer)
+    {
+        _timer = [[MATimer alloc] init];
+        _timer.delegate = self;
+    }
     
     
-    [NSTimer scheduledTimerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
-        [self startPlayThread];
-    }];
+    [_timer play];
+    
+    
+//    [NSTimer scheduledTimerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
+//        [self startPlayThread];
+//    }];
 }
 
 - (void)startDecodeQueue
@@ -111,6 +118,7 @@
     if (!_decodeOperation)
     {
         _decodeOperation = [[MADecodeOperation alloc] initWithDecoder: _decoder];
+        _decodeOperation.delegate = self;
     }
     if (!_decodeQueue)
     {
@@ -122,109 +130,10 @@
 
 - (void)startPlayThread
 {
-    
     MAYUVFrame* yuvFrame = [_decodeOperation.yuvFrameBuffer pop];
     if (yuvFrame) {
         [_gl displayYUV420pData:yuvFrame];
     }
-    
-    
-//    MAPacket* packet = packet = [[MAPacket alloc] init];
-//
-//    if ([_decoder read:packet])
-//    {
-//        if (packet) {
-//            if (packet.packet->stream_index == _decoder.videoStreamIndex)
-//            {
-//                NSArray* frames = [_decoder decodeYUV:packet];
-//                if (frames.count > 0)
-//                {
-//                    MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frames[0]];
-//                    [_gl displayYUV420pData:yuvFrame];
-//                }
-//
-//            }
-//        }
-//    }
-    
-    
-    
-
-    
-    
-//    dispatch_queue_t readQueue = dispatch_queue_create("ReadQueue.MAPlayer.com", DISPATCH_QUEUE_CONCURRENT);
-//    dispatch_async(readQueue, ^{
-//        MAPacket* pkt = nil;
-//        while (!_isExit) {
-//            [_lock lock];
-//            pkt = [[MAPacket alloc] init];
-//            [_decoder read:pkt error:NULL];
-//            [_packetBuffer addObject:pkt];
-//            [_lock unlock];
-//
-//            if (pkt.packet == NULL) {
-//                [NSThread sleepForTimeInterval:0.01];
-//                continue;
-//            }
-//            if (pkt.packet->size <= 0) {
-//                [NSThread sleepForTimeInterval:0.01];
-//                continue;
-//            }
-//
-//        }
-//    });
-//
-//    dispatch_queue_t playQueue = dispatch_queue_create("PlayQueue.MAPlayer.com", DISPATCH_QUEUE_CONCURRENT);
-//    dispatch_async(playQueue, ^{
-//
-//        while (!_isExit) {
-//            if (_packetBuffer.count == 0) {
-//                [NSThread sleepForTimeInterval:0.01];
-//                NSLog(@"0000000000000000000000");
-//                continue;
-//            }
-//
-//            MAYUVFrame* yuvFrame = nil;
-//
-//            [_lock lock];
-//            MAPacket * packet = [_packetBuffer lastObject];
-//            [_packetBuffer removeLastObject];
-//            if (packet) {
-//                if (packet.packet->stream_index == _decoder.videoStreamIndex)
-//                {
-//                    NSArray* frames = [_decoder decodeYUV:packet];
-//                    if (frames.count > 0)
-//                    {
-//                        yuvFrame = [_decoder yuvToGlData:frames[0]];
-////                        if (yuvFrame.width == 0) {
-////
-////                            continue;
-////                        }
-//                    }
-//
-//                }
-//            }
-//            [_lock unlock];
-//
-//
-//
-//            if (yuvFrame)
-//            {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    // [self.imageView setImage:image];
-//                    // playView.backgroundColor = color;
-//                    [gl displayYUV420pData:yuvFrame];
-////                    free(yuvFrame.luma.dataBuffer);
-////                    free(yuvFrame.chromaB.dataBuffer);
-////                    free(yuvFrame.chromaR.dataBuffer);
-//
-//                });
-//                break;
-//            }
-//
-//
-//        }
-//    });
 }
 
 - (void)displayAction:(CADisplayLink*)displayLink
@@ -240,6 +149,50 @@
     _decodeOperation = nil;
     _decodeQueue = nil;
     _decoder = nil;
+}
+
+- (BOOL)timerBetween:(uint64_t)time1 and:(uint64_t)time2
+{
+//    static uint64_t frame = 0;
+//    frame ++ ;
+//    NSLog(@"mayinglun log: pts:%llu  second:%f  frame:%lld", time2, time2 * 1.0 / AV_TIME_BASE, frame);
+    
+    BOOL success = NO;
+    
+//    NSLog(@"count3:%ld", _frameBuffer.count);
+    MAYUVFrame* firstFrame = [_yuvFrameBuffer fristFrame];
+    
+//    NSLog(@"mayinglun log: time1:%llu  time2:%llu  frame:%llu", time1, time2, firstFrame.pts);
+    
+    while (firstFrame) {
+        if (firstFrame.presentTime >= time2) {
+            success = YES;
+            break;
+        } else if (firstFrame.presentTime < time1) {
+            [_yuvFrameBuffer pop];
+            firstFrame = _yuvFrameBuffer.fristFrame;
+            continue;
+        } else {
+            MAYUVFrame* yuvFrame = [_yuvFrameBuffer pop];
+            if (yuvFrame) {
+                [_gl displayYUV420pData:yuvFrame];
+                success = YES;
+                break;
+            }
+        }
+    }
+    return success;
+}
+
+- (void)decodeFrom:(uint64_t)start to:(uint64_t)end
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* frames = [_decodeOperation.yuvFrameBuffer popAll];
+//        NSLog(@"count1:%ld", _frameBuffer.count);
+        [_yuvFrameBuffer pushFrames:frames];
+//        NSLog(@"count2:%ld", _frameBuffer.count);
+//        NSLog(@"count2:%ld  %ld", (long)_frameBuffer.count, frames.count);
+    });
 }
 
 @end

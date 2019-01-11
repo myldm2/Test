@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol MATimerDelegate <NSObject>
 
-- (void)timerBetween:(uint64_t)time1 and:(uint64_t)time2;
+- (BOOL)timerBetween:(uint64_t)time1 and:(uint64_t)time2;
 
 @end
 
@@ -22,7 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) uint64_t pts;
 @property (nonatomic, weak) id<MATimerDelegate> delegate;
 
-- (void)fire;
+- (void)play;
+
+- (void)pause;
 
 @end
 

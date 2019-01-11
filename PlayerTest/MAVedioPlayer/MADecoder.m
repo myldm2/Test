@@ -61,6 +61,7 @@
     uint64_t secondBase = _duration%(AV_TIME_BASE*60);
     uint64_t second = ceil(secondBase*1.0/AV_TIME_BASE);
     
+    NSLog(@"视频时长:%llu", _duration);
     NSLog(@"视频时长:%llu:%.2llu", min, second);
     
     for (int i = 0; i < _pFormatCtx->nb_streams; i ++) {
@@ -151,15 +152,8 @@
             MAFrame* frame = [[MAFrame alloc] init];
             re = avcodec_receive_frame(_pVideoCodecCtx, frame.frame);
             if (re == 0) {
+                frame.presentTime = frame.frame->pts * [self r2d: _pFormatCtx->streams[_videoStreamIndex]->time_base] * AV_TIME_BASE;
                 [frames addObject:frame];
-                
-//                if (!frame.frame || frame.frame->linesize[0] <= 0)
-//                {
-//                    NSLog(@"mayinglun log: frame 解析失败");
-//                } else {
-//                    NSLog(@"mayinglun log: frame 解析成功");
-//                }
-                
             }
         }
         return [frames copy];
@@ -180,6 +174,7 @@
             MAFrame* frame = [[MAFrame alloc] init];
             re = avcodec_receive_frame(_pAudioCodecCtx, frame.frame);
             if (re == 0) {
+                frame.presentTime = frame.frame->pts * [self r2d: _pFormatCtx->streams[_videoStreamIndex]->time_base] * AV_TIME_BASE;
                 [frames addObject:frame];
             }
         }
@@ -241,6 +236,7 @@
     yuvFrame.width = pYuv->width;
     yuvFrame.height = pYuv->height;
     yuvFrame.pts = pYuv->pts;
+    yuvFrame.presentTime = frame.presentTime;
     
     unsigned char* luma = malloc(lumaLength);
     unsigned char* chromaB = malloc(chromBLength);
@@ -264,6 +260,10 @@
     
     return yuvFrame;
     
+}
+
+- (double)r2d:(AVRational)r{
+    return r.num == 0 || r.den == 0 ? 0.:(double)r.num/(double)r.den;
 }
 
 static void copyDecodedFrame(unsigned char *src, unsigned char *dist,int linesize, int width, int height)

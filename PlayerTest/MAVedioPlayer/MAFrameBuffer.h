@@ -18,9 +18,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)push:(MAYUVFrame *)frame;
 
+- (void)pushFrames:(NSArray<MAYUVFrame*> *)frames;
+
 - (MAYUVFrame *)pop;
 
 - (NSArray<MAYUVFrame *> *)popAll;
+
+- (MAYUVFrame*)fristFrame;
+
+- (MAYUVFrame*)lastFrame;
+
+- (NSInteger)count;
 
 @end
 

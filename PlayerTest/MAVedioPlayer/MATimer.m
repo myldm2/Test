@@ -22,34 +22,38 @@
 {
     self = [super init];
     if (self) {
-        _fps = 60;
+        _fps = 15;
         _displayLink = [[CADisplayLink alloc] init];
-//        _displayLink.preferredFramesPerSecond = _fps;
     }
     return self;
 }
 
-- (void)fire
+- (void)play
 {
     _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayAction:)];
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    _displayLink.preferredFramesPerSecond = _fps;
+}
+
+- (void)pause
+{
+    [_displayLink invalidate];
+    _displayLink = nil;
 }
 
 - (void)displayAction:(CADisplayLink*)displayLink
 {
     if (_fps > 0) {
-        static uint64_t frame = 0;
-        frame ++ ;
         uint64_t timeInterval = AV_TIME_BASE / _fps;
-        uint64_t pts = _pts;
-        _pts += timeInterval;
-        NSLog(@"mayinglun log: pts:%llu  second:%f  frame:%lld", _pts, _pts * 1.0 / AV_TIME_BASE, frame);
-        
+        uint64_t ptsStart = _pts;
+        uint64_t ptsEnd = _pts + timeInterval;
         if (_delegate && [_delegate respondsToSelector:@selector(timerBetween: and:)])
         {
-            [_delegate timerBetween:pts and:_pts];
+            if ([_delegate timerBetween:ptsStart and:ptsEnd])
+            {
+                _pts = ptsEnd;
+            }
         }
-        
     }
 }
 

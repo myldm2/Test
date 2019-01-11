@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MAFrame : NSObject
 
 @property (nonatomic, assign, readonly) AVFrame* frame;
+@property (nonatomic, assign) uint64_t presentTime;
 
 @end
 

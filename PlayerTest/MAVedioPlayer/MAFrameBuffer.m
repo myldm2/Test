@@ -30,7 +30,8 @@
 {
     if (_multithreadProtection)
     {
-        dispatch_barrier_async(_queue, ^{
+//        dispatch_barrier_async(_queue, ^{
+        dispatch_sync(_queue, ^{
             [self _push:frame];
         });
     } else {
@@ -43,11 +44,30 @@
     [_frames addObject: frame];
 }
 
+- (void)pushFrames:(NSArray<MAYUVFrame*> *)frames
+{
+    if (_multithreadProtection)
+    {
+//        dispatch_barrier_async(_queue, ^{
+        dispatch_sync(_queue, ^{
+            [self _pushFrames:frames];
+        });
+    } else {
+        [self _pushFrames:frames];
+    }
+}
+
+- (void)_pushFrames:(NSArray<MAYUVFrame*> *)frames
+{
+    [_frames addObjectsFromArray:frames];
+}
+
 - (MAYUVFrame *)pop
 {
     __block MAYUVFrame *frame;
     if (_multithreadProtection)
     {
+//        dispatch_barrier_async(_queue, ^{
         dispatch_sync(_queue, ^{
             frame = [self _pop];
         });
@@ -73,6 +93,7 @@
     __block NSArray<MAYUVFrame *> * frames;
     if (_multithreadProtection)
     {
+//        dispatch_barrier_async(_queue, ^{
         dispatch_sync(_queue, ^{
             frames = [self _popAll];
         });
@@ -88,8 +109,73 @@
     if (_frames.count > 0)
     {
         frames = [NSArray arrayWithArray:_frames];
+        [_frames removeAllObjects];
     }
     return frames;
+}
+
+- (MAYUVFrame*)fristFrame
+{
+    __block MAYUVFrame *frame;
+    if (_multithreadProtection)
+    {
+        dispatch_sync(_queue, ^{
+            frame = [self _fristFrame];
+        });
+    } else {
+        frame = [self _fristFrame];
+    }
+    return frame;
+}
+
+- (MAYUVFrame *)_fristFrame
+{
+    MAYUVFrame *frame = nil;
+    if (_frames.count > 0)
+    {
+        frame = _frames[0];
+    }
+    return frame;
+}
+
+- (MAYUVFrame*)lastFrame
+{
+    __block MAYUVFrame *frame;
+    if (_multithreadProtection)
+    {
+        dispatch_sync(_queue, ^{
+            frame = [self _lastFrame];
+        });
+    } else {
+        frame = [self _lastFrame];
+    }
+    return frame;
+}
+
+- (MAYUVFrame *)_lastFrame
+{
+    MAYUVFrame *frame = nil;
+    frame = [_frames lastObject];
+    return frame;
+}
+
+- (NSInteger)count
+{
+    __block NSInteger count;
+    if (_multithreadProtection)
+    {
+        dispatch_sync(_queue, ^{
+            count = [self _count];
+        });
+    } else {
+        count = [self _count];
+    }
+    return count;
+}
+
+- (NSInteger)_count
+{
+    return _frames.count;
 }
 
 @end

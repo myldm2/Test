@@ -12,6 +12,7 @@
 {
     MADecoder* _decoder;
     NSLock* _lock;
+    BOOL _pause;
 }
 
 @end
@@ -46,8 +47,40 @@
                 {
                     NSArray* frames = [_decoder decodeYUV:packet];
                     for (MAFrame* frame in frames) {
+                        
                         MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frame];
                         [_yuvFrameBuffer push:yuvFrame];
+//                        NSLog(@"frame.pts:%llu", yuvFrame.pts);
+//                        NSLog(@"count:%ld", (long)_yuvFrameBuffer.count);
+//                        NSLog(@"show frame pts:%llu", yuvFrame.presentTime);
+                        
+                        if (_delegate && [_delegate respondsToSelector:@selector(decodeOperation: decodeYUVFrom: to:)])
+                        {
+                            MAYUVFrame* firstFrame = _yuvFrameBuffer.fristFrame;
+                            MAYUVFrame* lastFrame = _yuvFrameBuffer.lastFrame;
+//                            NSLog(@"frame.pts:%llu", firstFrame.pts);
+//                            NSLog(@"frame.pts:%@", yuvFrame);
+//                            NSLog(@"frame.pts:%@", lastFrame);
+//                            NSLog(@"count1:%ld", (long)_yuvFrameBuffer.count);
+                            [_delegate decodeOperation:self decodeYUVFrom:firstFrame.presentTime to:lastFrame.presentTime];
+                        }
+                        
+                    }
+                } else if (packet.packet->stream_index == _decoder.audioStreamIndex)
+                {
+                    NSArray* frames = [_decoder decodePCM:packet];
+                    for (MAFrame* frame in frames) {
+                        
+//                        MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frame];
+//                        [_yuvFrameBuffer push:yuvFrame];
+//                        
+//                        if (_delegate && [_delegate respondsToSelector:@selector(decodeOperation: decodeYUVFrom: to:)])
+//                        {
+//                            MAYUVFrame* firstFrame = _yuvFrameBuffer.fristFrame;
+//                            MAYUVFrame* lastFrame = _yuvFrameBuffer.lastFrame;
+//                            [_delegate decodeOperation:self decodeYUVFrom:firstFrame.presentTime to:lastFrame.presentTime];
+//                        }
+                        
                     }
                 }
             } else {

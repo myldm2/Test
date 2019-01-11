@@ -56,6 +56,7 @@
 		B77004EF21CC87EA00651B86 /* VedioPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */; };
 		B77004F321CC88CA00651B86 /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B77004F121CC88CA00651B86 /* video.mp4 */; };
 		B77004F421CC88CA00651B86 /* icon_btn_back.png in Resources */ = {isa = PBXBuildFile; fileRef = B77004F221CC88CA00651B86 /* icon_btn_back.png */; };
+		B770F47921E5E6E800A65F73 /* MAPCMFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = B770F47821E5E6E800A65F73 /* MAPCMFrame.m */; };
 		B776AEE321D350F1002C6ED2 /* MAVedioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B776AEE221D350F1002C6ED2 /* MAVedioPlayer.m */; };
 		B776AEE621D37556002C6ED2 /* MAPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = B776AEE521D37556002C6ED2 /* MAPacket.m */; };
 		B78163F021D5FB3200EDAC94 /* MAYUVFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = B78163EF21D5FB3200EDAC94 /* MAYUVFrame.m */; };
@@ -258,6 +259,8 @@
 		B77004EE21CC87EA00651B86 /* VedioPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VedioPlayerViewController.m; sourceTree = "<group>"; };
 		B77004F121CC88CA00651B86 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
 		B77004F221CC88CA00651B86 /* icon_btn_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_btn_back.png; sourceTree = "<group>"; };
+		B770F47721E5E6E800A65F73 /* MAPCMFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAPCMFrame.h; sourceTree = "<group>"; };
+		B770F47821E5E6E800A65F73 /* MAPCMFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPCMFrame.m; sourceTree = "<group>"; };
 		B776AEE121D350F1002C6ED2 /* MAVedioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAVedioPlayer.h; sourceTree = "<group>"; };
 		B776AEE221D350F1002C6ED2 /* MAVedioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAVedioPlayer.m; sourceTree = "<group>"; };
 		B776AEE421D37556002C6ED2 /* MAPacket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAPacket.h; sourceTree = "<group>"; };
@@ -694,6 +697,8 @@
 				B79B9ABB21D4793400DDDF2D /* MAFrame.m */,
 				B78163EE21D5FB3200EDAC94 /* MAYUVFrame.h */,
 				B78163EF21D5FB3200EDAC94 /* MAYUVFrame.m */,
+				B770F47721E5E6E800A65F73 /* MAPCMFrame.h */,
+				B770F47821E5E6E800A65F73 /* MAPCMFrame.m */,
 				B78163F121D6011500EDAC94 /* MAOpenglView.h */,
 				B78163F221D6011500EDAC94 /* MAOpenglView.m */,
 				B7540B8F21D7499A00E1DD0A /* MAFrameBuffer.h */,
@@ -791,6 +796,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7D39943217324FA00AF3DA8 /* ViewController.m in Sources */,
+				B770F47921E5E6E800A65F73 /* MAPCMFrame.m in Sources */,
 				B7B3118B21DDA05E0088C746 /* MADecodeOperation.m in Sources */,
 				B7BC4DEB21D0C67700812FB2 /* MADecoder.m in Sources */,
 				B77004EF21CC87EA00651B86 /* VedioPlayerViewController.m in Sources */,

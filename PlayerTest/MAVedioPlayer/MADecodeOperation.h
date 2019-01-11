@@ -12,11 +12,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MADecodeOperation;
+
+@protocol MADecodeOperationDelegate <NSObject>
+
+- (void)decodeOperation:(MADecodeOperation*)operation decodeYUVFrom:(uint64_t)start to:(uint64_t)end;
+
+@end
+
 @interface MADecodeOperation : NSBlockOperation
 
 @property (nonatomic, strong, readonly) MAFrameBuffer* yuvFrameBuffer;
 
+@property (nonatomic, weak) id<MADecodeOperationDelegate> delegate;
+
 - (instancetype)initWithDecoder:(MADecoder*)decoder;
+
+- (void)play;
+
+- (void)pause;
 
 @end
 
