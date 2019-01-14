@@ -20,6 +20,7 @@
 #import "MADecodeOperation.h"
 #import "MATimer.h"
 #import "MAFrameBuffer.h"
+#import "MAOpenalPlayer.h"
 
 @interface MAVedioPlayer () <MATimerDelegate, MADecodeOperationDelegate>
 {
@@ -37,6 +38,8 @@
 @property (nonatomic, strong) CADisplayLink* displayLink;
 @property (nonatomic, strong) MATimer* timer;
 @property (nonatomic, strong) MAFrameBuffer* yuvFrameBuffer;
+@property (nonatomic, strong) MAFrameBuffer* pcmFrameBuffer;
+@property (nonatomic, strong) MAOpenalPlayer* audioPlayer;
 
 
 
@@ -61,6 +64,7 @@
         _lock = [[NSLock alloc] init];
         _decodeQueue = [[NSOperationQueue alloc] init];
         _yuvFrameBuffer = [[MAFrameBuffer alloc] initWithMultithreadProtection:NO];
+        _pcmFrameBuffer = [[MAFrameBuffer alloc] initWithMultithreadProtection:NO];
     }
     return self;
 }
@@ -90,6 +94,12 @@
 - (void)play
 {
 //    [self startPlayThread];
+    
+    if (!_audioPlayer)
+    {
+        _audioPlayer = [[MAOpenalPlayer alloc]init];
+        [_audioPlayer initOpenAL];
+    }
 
     [self startDecodeQueue];
     
@@ -147,6 +157,10 @@
     _decodeOperation = nil;
     _decodeQueue = nil;
     _decoder = nil;
+    
+    [_audioPlayer stopSound];
+    [_audioPlayer cleanUpOpenAL];
+    _audioPlayer = nil;
 }
 
 - (BOOL)timerBetween:(uint64_t)time1 and:(uint64_t)time2
@@ -158,17 +172,17 @@
     BOOL success = NO;
     
 //    NSLog(@"count3:%ld", _frameBuffer.count);
-    MAYUVFrame* firstFrame = (MAYUVFrame*)[_yuvFrameBuffer fristFrame];
+    MAYUVFrame* yuvFirstFrame = (MAYUVFrame*)[_yuvFrameBuffer fristFrame];
     
 //    NSLog(@"mayinglun log: time1:%llu  time2:%llu  frame:%llu", time1, time2, firstFrame.pts);
     
-    while (firstFrame) {
-        if (firstFrame.presentTime >= time2) {
+    while (yuvFirstFrame) {
+        if (yuvFirstFrame.presentTime >= time2) {
             success = YES;
             break;
-        } else if (firstFrame.presentTime < time1) {
+        } else if (yuvFirstFrame.presentTime < time1) {
             [_yuvFrameBuffer pop];
-            firstFrame = (MAYUVFrame*)_yuvFrameBuffer.fristFrame;
+            yuvFirstFrame = (MAYUVFrame*)_yuvFrameBuffer.fristFrame;
             continue;
         } else {
             MAYUVFrame* yuvFrame = (MAYUVFrame*)[_yuvFrameBuffer pop];
@@ -179,6 +193,26 @@
             }
         }
     }
+    
+    MAPCMFrame* pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
+    while (pcmFirstFrame) {
+        if (pcmFirstFrame.presentTime >= time2) {
+            success = YES;
+            break;
+        } else if (pcmFirstFrame.presentTime < time1) {
+            [_pcmFrameBuffer pop];
+            pcmFirstFrame = (MAPCMFrame*)_pcmFrameBuffer.fristFrame;
+            continue;
+        } else {
+            MAPCMFrame* pcmFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
+            if (pcmFrame) {
+                [_audioPlayer playFrame:pcmFrame];
+                success = YES;
+                break;
+            }
+        }
+    }
+    
     return success;
 }
 
@@ -195,7 +229,10 @@
 
 - (void)decodeOperation:(MADecodeOperation*)operation decodePCMFrom:(uint64_t)start to:(uint64_t)end
 {
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray* frames = [_decodeOperation.pcmFrameBuffer popAll];
+        [_pcmFrameBuffer pushFrames:frames];
+    });
 }
 
 @end

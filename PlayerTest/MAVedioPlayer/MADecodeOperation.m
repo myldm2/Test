@@ -26,6 +26,7 @@
         _decoder = decoder;
         _lock = [[NSLock alloc] init];
         _yuvFrameBuffer = [[MAFrameBuffer alloc] initWithMultithreadProtection: YES];
+        _pcmFrameBuffer = [[MAFrameBuffer alloc] initWithMultithreadProtection: YES];
         __weak typeof(self) __self = self;
         [self addExecutionBlock:^{
             [__self decode];

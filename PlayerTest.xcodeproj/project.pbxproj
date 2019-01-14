@@ -79,6 +79,7 @@
 		B7D3994F21732F2200AF3DA8 /* MP3Sample.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B7D3994E21732F2200AF3DA8 /* MP3Sample.mp3 */; };
 		B7E5B3BF21B128770008D018 /* OpenalPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E5B3BE21B128770008D018 /* OpenalPlayer.m */; };
 		B7E63E2021C7947C00F0C3C0 /* XPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E63E1F21C7947C00F0C3C0 /* XPlayer.m */; };
+		B7FBB5B721EC310800CAD766 /* MAOpenalPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FBB5B621EC310800CAD766 /* MAOpenalPlayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -305,6 +306,8 @@
 		B7E5B3BE21B128770008D018 /* OpenalPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenalPlayer.m; sourceTree = "<group>"; };
 		B7E63E1E21C7947C00F0C3C0 /* XPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPlayer.h; sourceTree = "<group>"; };
 		B7E63E1F21C7947C00F0C3C0 /* XPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPlayer.m; sourceTree = "<group>"; };
+		B7FBB5B521EC310800CAD766 /* MAOpenalPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAOpenalPlayer.h; sourceTree = "<group>"; };
+		B7FBB5B621EC310800CAD766 /* MAOpenalPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAOpenalPlayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -712,6 +715,8 @@
 				B7B3118A21DDA05E0088C746 /* MADecodeOperation.m */,
 				B7D060EA21E3317D00D3E10E /* MATimer.h */,
 				B7D060EB21E3317D00D3E10E /* MATimer.m */,
+				B7FBB5B521EC310800CAD766 /* MAOpenalPlayer.h */,
+				B7FBB5B621EC310800CAD766 /* MAOpenalPlayer.m */,
 			);
 			path = MAVedioPlayer;
 			sourceTree = "<group>";
@@ -820,6 +825,7 @@
 				B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */,
 				B7CC2A9A2166420900FEDD67 /* MCAudioBuffer.m in Sources */,
 				B686246A2044E64200FE7C9D /* main.m in Sources */,
+				B7FBB5B721EC310800CAD766 /* MAOpenalPlayer.m in Sources */,
 				B79B9ABC21D4793400DDDF2D /* MAFrame.m in Sources */,
 				B78163F321D6011500EDAC94 /* MAOpenglView.m in Sources */,
 				5A432C132158D5F100928592 /* MCParsedAudioData.m in Sources */,
