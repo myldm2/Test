@@ -99,7 +99,9 @@
     {
         _audioPlayer = [[MAOpenalPlayer alloc]init];
         [_audioPlayer initOpenAL];
+//        [_audioPlayer playSound];
     }
+    
 
     [self startDecodeQueue];
     
@@ -171,11 +173,41 @@
     
     BOOL success = NO;
     
-//    NSLog(@"count3:%ld", _frameBuffer.count);
+//    MAYUVFrame* yuvLastFrame = (MAYUVFrame*)[_yuvFrameBuffer lastFrame];
+//    MAPCMFrame* pcmLastFrame = (MAPCMFrame*)[_pcmFrameBuffer lastFrame];
+//
+//    if ((yuvLastFrame.presentTime > pcmLastFrame.presentTime - 900)&& pcmLastFrame.presentTime > 500) {
+//        return success;
+//    }
+    
+//    MAYUVFrame* yuvFirstFrame = (MAYUVFrame*)[_yuvFrameBuffer fristFrame];
+//    MAPCMFrame* pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
+//    while (yuvFirstFrame && pcmFirstFrame) {
+//        if (yuvFirstFrame.presentTime >= time2) {
+//            success = YES;
+//            break;
+//        } else if (yuvFirstFrame.presentTime < time1) {
+//            [_yuvFrameBuffer pop];
+//            yuvFirstFrame = (MAYUVFrame*)_yuvFrameBuffer.fristFrame;
+//            continue;
+//        } else {
+//            MAYUVFrame* yuvFrame = (MAYUVFrame*)[_yuvFrameBuffer pop];
+//            if (yuvFrame) {
+//                [_gl displayYUV420pData:yuvFrame];
+//                yuvFirstFrame = (MAYUVFrame*)[_yuvFrameBuffer fristFrame];
+//                success = YES;
+//            }
+//        }
+//    }
+    
+    if (_audioPlayer.m_numqueued > 10 && _audioPlayer.m_numqueued < 35) {
+        return NO;
+    }else if (_audioPlayer.m_numqueued > 35){
+        return NO;
+    }
+    
+    
     MAYUVFrame* yuvFirstFrame = (MAYUVFrame*)[_yuvFrameBuffer fristFrame];
-    
-//    NSLog(@"mayinglun log: time1:%llu  time2:%llu  frame:%llu", time1, time2, firstFrame.pts);
-    
     while (yuvFirstFrame) {
         if (yuvFirstFrame.presentTime >= time2) {
             success = YES;
@@ -188,14 +220,24 @@
             MAYUVFrame* yuvFrame = (MAYUVFrame*)[_yuvFrameBuffer pop];
             if (yuvFrame) {
                 [_gl displayYUV420pData:yuvFrame];
+                yuvFirstFrame = (MAYUVFrame*)[_yuvFrameBuffer fristFrame];
                 success = YES;
-                break;
             }
         }
     }
     
     MAPCMFrame* pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
+    
     while (pcmFirstFrame) {
+//        MAPCMFrame* pcmFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
+//        if (pcmFrame) {
+//            [_audioPlayer playFrame:pcmFrame];
+//            pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
+//            success = YES;
+//        } else
+//        {
+//            break;
+//        }
         if (pcmFirstFrame.presentTime >= time2) {
             success = YES;
             break;
@@ -207,8 +249,8 @@
             MAPCMFrame* pcmFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
             if (pcmFrame) {
                 [_audioPlayer playFrame:pcmFrame];
+                pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
                 success = YES;
-                break;
             }
         }
     }

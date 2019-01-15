@@ -10,4 +10,9 @@
 
 @implementation MAPCMFrame
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"MAPCMFrame data_length:%lu sampleRate:%d sampleSize:%d channel:%d", (unsigned long)self.pcm.length, self.sampleRate, self.sampleSize, self.channel];
+}
+
 @end

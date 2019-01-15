@@ -11,6 +11,7 @@
 #import "FFmpegDecoder.h"
 #import "OpenglView.h"
 #import "YUV_GL_DATA.h"
+#import "MAOpenalPlayer.h"
 
 @interface XPlayer (){
     
@@ -18,7 +19,7 @@
     FFmpegDecoder   * decoder;
     BOOL              isExit;
     NSLock          * lock;
-    OpenalPlayer    * audioPlayer;
+    MAOpenalPlayer    * audioPlayer;
     NSMutableArray  * vPktArr;
     NSMutableArray  * aPktArr;
     __block UIImage * image;
@@ -73,7 +74,7 @@
     [gl setVideoSize:playView.frame.size.width height:playView.frame.size.height];
     [playView addSubview:gl];
     //初始化openal
-    audioPlayer = [[OpenalPlayer alloc] init];
+    audioPlayer = [[MAOpenalPlayer alloc] init];
     if (!audioPlayer) {
         NSLog(@"init openal fail...");
         return NO;
@@ -86,7 +87,7 @@
 
 - (void)play{
     if (_isStop) {
-        [audioPlayer setup];
+        [audioPlayer initOpenAL];
     }
     isExit = NO;
     [self startPlayThread];

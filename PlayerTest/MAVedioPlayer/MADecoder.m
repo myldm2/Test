@@ -98,6 +98,7 @@
                 goto error;
             }
             
+            _audioSampleSize = SAMPLE_SIZE;
             _audioSampleRate = _pAudioCodecCtx->sample_rate;
             _audioChannels = _pAudioCodecCtx->channels;
 //            _audioSampleSize = _pAudioCodecCtx->sample_s
@@ -287,7 +288,6 @@
     uint8_t * data[1];
     data[0] = (uint8_t*)dataBuf;
     int len = swr_convert(_pSwrCtx, data, 10000, (const uint8_t**)frame.frame->data, frame.frame->nb_samples);
-    
     if (len < 0) {
         free(dataBuf);
         return nil;

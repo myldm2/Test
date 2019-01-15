@@ -20,6 +20,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define SAMPLE_SIZE 16
+#define SAMPLE_RATE 44100
 #define CHANNEL     2
 
 @interface MADecoder : NSObject

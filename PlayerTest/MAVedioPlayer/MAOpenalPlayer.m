@@ -45,6 +45,16 @@
     alSourcei(m_outSourceId, AL_LOOPING, AL_FALSE);
     alSourcef(m_outSourceId, AL_SOURCE_TYPE, AL_STREAMING);
     
+    if((ret = alGetError()) != AL_NO_ERROR)
+    {
+        printf("error init error %x \n", ret);
+        // printf("error alGenBuffers %x : %s\n", ret,alutGetErrorString (ret));
+        //AL_ILLEGAL_ENUM
+        //AL_INVALID_VALUE
+        //#define AL_ILLEGAL_COMMAND                        0xA004
+        //#define AL_INVALID_OPERATION                      0xA004
+    }
+    
     return ret;
 }
 
@@ -156,7 +166,6 @@
             _m_samplerate = frame.sampleRate;
             _m_bit = frame.sampleSize;
             _m_channel = frame.channel;
-            _m_oneframeduration = _m_datasize * 1.0 /(_m_bit/8) /_m_channel /_m_samplerate * 1000 ;   //计算一帧数据持续时间
         }
     }
     
@@ -196,7 +205,7 @@
         }
     }
     //指定要将数据复制到缓冲区中的数据
-    alBufferData(bufferID, format, frame.pcm.bytes, frame.sampleSize, frame.sampleRate);
+    alBufferData(bufferID, format, frame.pcm.bytes, frame.pcm.length ,frame.sampleRate);
     if((ret = alGetError()) != AL_NO_ERROR)
     {
         printf("error alBufferData %x\n", ret);
@@ -233,6 +242,205 @@
 -(void)setPlayRate:(double)playRate{
     
     alSourcef(m_outSourceId, AL_PITCH, playRate);
+}
+
+- (int)openAudioFromQueue:(char*)data andWithDataSize:(int)dataSize andWithSampleRate:(int) aSampleRate andWithAbit:(int)aBit andWithAchannel:(int)aChannel{
+    
+//    NSLog(@"mayinglun log rrr:%d", dataSize);
+    
+//    static int i = 0;
+//    if (dataSize > 0) {
+//        NSLog(@">>>>>>>>>>>>>>>>>>>>:%d", i);
+//        NSUInteger length = dataSize;
+//        NSData* d = [NSData dataWithBytes:data length:length];
+//        NSLog(@"dddddd data:%@", d);
+//        NSLog(@"dddddd length:%d", d.length);
+//        //        NSLog(@"dddddd:%d", dataSize);
+//        //        NSLog(@"dddddd:%lu", (unsigned long)length);
+//        NSLog(@"<<<<<<<<<<<<<<<<<<<<:%d", i);
+//        i ++;
+//    }
+    
+    if (dataSize > 0)
+    {
+        NSData* pcm = [NSData dataWithBytes:data length:dataSize];
+        MAPCMFrame* frame = [[MAPCMFrame alloc] init];
+        frame.channel = aChannel;
+        frame.sampleSize = aBit;
+        frame.sampleRate = aSampleRate;
+        frame.pcm = pcm;
+        return [self testPlayFrame:frame];
+    }
+    
+    
+    
+    
+    int ret = 0;
+//    //样本数openal的表示方法
+//    ALenum format = 0;
+//    //buffer id 负责缓存,要用局部变量每次数据都是新的地址
+//    ALuint bufferID = 0;
+//
+//    if (_m_datasize == 0 &&
+//        _m_samplerate == 0 &&
+//        _m_bit == 0 &&
+//        _m_channel == 0)
+//    {
+//        if (dataSize != 0 &&
+//            aSampleRate != 0 &&
+//            aBit != 0 &&
+//            aChannel != 0)
+//        {
+//            _m_datasize = dataSize;
+//            _m_samplerate = aSampleRate;
+//            _m_bit = aBit;
+//            _m_channel = aChannel;
+//        }
+//    }
+//
+//    //创建一个buffer
+//    alGenBuffers(1, &bufferID);
+//    if((ret = alGetError()) != AL_NO_ERROR)
+//    {
+//        printf("error alGenBuffers %x \n", ret);
+//        // printf("error alGenBuffers %x : %s\n", ret,alutGetErrorString (ret));
+//        //AL_ILLEGAL_ENUM
+//        //AL_INVALID_VALUE
+//        //#define AL_ILLEGAL_COMMAND                        0xA004
+//        //#define AL_INVALID_OPERATION                      0xA004
+//    }
+//
+//    if (aBit == 8)
+//    {
+//        if (aChannel == 1)
+//        {
+//            format = AL_FORMAT_MONO8;
+//        }
+//        else if(aChannel == 2)
+//        {
+//            format = AL_FORMAT_STEREO8;
+//        }
+//    }
+//
+//    if( aBit == 16 )
+//    {
+//        if( aChannel == 1 )
+//        {
+//            format = AL_FORMAT_MONO16;
+//        }
+//        if( aChannel == 2 )
+//        {
+//            format = AL_FORMAT_STEREO16;
+//        }
+//    }
+//    //指定要将数据复制到缓冲区中的数据
+//    alBufferData(bufferID, format, data, dataSize,aSampleRate);
+//    if((ret = alGetError()) != AL_NO_ERROR)
+//    {
+//        printf("error alBufferData %x\n", ret);
+//        //AL_ILLEGAL_ENUM
+//        //AL_INVALID_VALUE
+//        //#define AL_ILLEGAL_COMMAND                        0xA004
+//        //#define AL_INVALID_OPERATION                      0xA004
+//    }
+//    //附加一个或一组buffer到一个source上
+//    alSourceQueueBuffers(m_outSourceId, 1, &bufferID);
+//    if((ret = alGetError()) != AL_NO_ERROR)
+//    {
+//        printf("error alSourceQueueBuffers %x\n", ret);
+//    }
+//
+//    //更新队列数据
+//    ret = [self updataQueueBuffer];
+//
+//    bufferID = 0;
+    
+    return ret;
+}
+
+- (int)testPlayFrame:(MAPCMFrame*)frame {
+    
+    int ret = 0;
+    //样本数openal的表示方法
+    ALenum format = 0;
+    //buffer id 负责缓存,要用局部变量每次数据都是新的地址
+    ALuint bufferID = 0;
+    
+    if (_m_datasize == 0 &&
+        _m_samplerate == 0 &&
+        _m_bit == 0 &&
+        _m_channel == 0)
+    {
+        if (frame.pcm.length != 0 &&
+            frame.sampleRate != 0 &&
+            frame.sampleSize != 0 &&
+            frame.channel != 0)
+        {
+            _m_datasize = frame.pcm.length;
+            _m_samplerate = frame.sampleRate;
+            _m_bit = frame.sampleSize;
+            _m_channel = frame.channel;
+        }
+    }
+    
+    //创建一个buffer
+    alGenBuffers(1, &bufferID);
+    if((ret = alGetError()) != AL_NO_ERROR)
+    {
+        printf("error alGenBuffers %x \n", ret);
+        // printf("error alGenBuffers %x : %s\n", ret,alutGetErrorString (ret));
+        //AL_ILLEGAL_ENUM
+        //AL_INVALID_VALUE
+        //#define AL_ILLEGAL_COMMAND                        0xA004
+        //#define AL_INVALID_OPERATION                      0xA004
+    }
+    
+    if (frame.sampleSize == 8)
+    {
+        if (frame.channel == 1)
+        {
+            format = AL_FORMAT_MONO8;
+        }
+        else if(frame.channel == 2)
+        {
+            format = AL_FORMAT_STEREO8;
+        }
+    }
+    
+    if( frame.sampleSize == 16 )
+    {
+        if( frame.channel == 1 )
+        {
+            format = AL_FORMAT_MONO16;
+        }
+        if( frame.channel == 2 )
+        {
+            format = AL_FORMAT_STEREO16;
+        }
+    }
+    //指定要将数据复制到缓冲区中的数据
+    alBufferData(bufferID, format, frame.pcm.bytes, frame.pcm.length ,frame.sampleRate);
+    if((ret = alGetError()) != AL_NO_ERROR)
+    {
+        printf("error alBufferData %x\n", ret);
+        //AL_ILLEGAL_ENUM
+        //AL_INVALID_VALUE
+        //#define AL_ILLEGAL_COMMAND                        0xA004
+        //#define AL_INVALID_OPERATION                      0xA004
+    }
+    //附加一个或一组buffer到一个source上
+    alSourceQueueBuffers(m_outSourceId, 1, &bufferID);
+    if((ret = alGetError()) != AL_NO_ERROR)
+    {
+        printf("error alSourceQueueBuffers %x\n", ret);
+    }
+    
+    //更新队列数据
+    ret = [self updataQueueBuffer];
+    
+    bufferID = 0;
+    
+    return ret;
 }
 
 @end

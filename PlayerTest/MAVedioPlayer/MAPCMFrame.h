@@ -13,9 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MAPCMFrame : MAOutPutFrame
 
 @property (nonatomic, strong) NSData* pcm;
-@property (nonatomic, assign) int64_t sampleRate;
-@property (nonatomic, assign) int64_t sampleSize;
-@property (nonatomic, assign) int64_t channel;
+@property (nonatomic, assign) int sampleRate;
+@property (nonatomic, assign) int sampleSize;
+@property (nonatomic, assign) int channel;
 
 @end
 
