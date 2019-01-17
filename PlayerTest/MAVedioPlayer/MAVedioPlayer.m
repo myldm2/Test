@@ -232,37 +232,39 @@
         }
     }
     
-    time2 = time2 + 5 * AV_TIME_BASE;
+//    time2 = time2 + 2 * AV_TIME_BASE;
     MAPCMFrame* pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
-//
-//    while (pcmFirstFrame && [_audioPlayer m_numqueue] < 600)
-//    {
-//        MAPCMFrame* pcmFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
-//        if (pcmFrame) {
-//            [_audioPlayer playFrame:pcmFrame];
-//            pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
-//            success = YES;
-//        }
-//    }
 
-    while (pcmFirstFrame) {
-        if (pcmFirstFrame.presentTime >= time2) {
-            success = YES;
-            break;
-        } else if (pcmFirstFrame.presentTime < time1) {
-            [_pcmFrameBuffer pop];
-            pcmFirstFrame = (MAPCMFrame*)_pcmFrameBuffer.fristFrame;
-            continue;
-        } else {
+    while (pcmFirstFrame && [_audioPlayer m_numqueue] < 25)
+    {
+        if (pcmFirstFrame.presentTime >= time1) {
             MAPCMFrame* pcmFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
             if (pcmFrame) {
                 [_audioPlayer playFrame:pcmFrame];
-                NSLog(@"mayinglun log:m_numqueued:%d", _audioPlayer.m_numqueued);
                 pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
                 success = YES;
             }
         }
     }
+
+//    while (pcmFirstFrame) {
+//        if (pcmFirstFrame.presentTime >= time2) {
+//            success = YES;
+//            break;
+//        } else if (pcmFirstFrame.presentTime < time1) {
+//            [_pcmFrameBuffer pop];
+//            pcmFirstFrame = (MAPCMFrame*)_pcmFrameBuffer.fristFrame;
+//            continue;
+//        } else {
+//            MAPCMFrame* pcmFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
+//            if (pcmFrame) {
+//                [_audioPlayer playFrame:pcmFrame];
+//                NSLog(@"mayinglun log:m_numqueued:%d", _audioPlayer.m_numqueued);
+//                pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
+//                success = YES;
+//            }
+//        }
+//    }
     
     return success;
 }
