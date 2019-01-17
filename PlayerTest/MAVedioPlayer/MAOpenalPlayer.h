@@ -30,4 +30,7 @@
 -(void)stopSound;
 -(int)playFrame:(MAPCMFrame*)frame;
 -(int)openAudioFromQueue:(char*)data andWithDataSize:(int)dataSize andWithSampleRate:(int) aSampleRate andWithAbit:(int)aBit andWithAchannel:(int)aChannel;
+
+-(int)m_numqueue;
+
 @end

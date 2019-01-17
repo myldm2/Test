@@ -50,20 +50,15 @@
                     for (MAFrame* frame in frames) {
                         
                         MAYUVFrame* yuvFrame = [_decoder yuvToGlData:frame];
-                        [_yuvFrameBuffer push:yuvFrame];
-//                        NSLog(@"frame.pts:%llu", yuvFrame.pts);
-//                        NSLog(@"count:%ld", (long)_yuvFrameBuffer.count);
-//                        NSLog(@"show frame pts:%llu", yuvFrame.presentTime);
-                        
-                        if (_delegate && [_delegate respondsToSelector:@selector(decodeOperation: decodeYUVFrom: to:)])
-                        {
-                            MAYUVFrame* firstFrame = (MAYUVFrame*)_yuvFrameBuffer.fristFrame;
-                            MAYUVFrame* lastFrame = (MAYUVFrame*)_yuvFrameBuffer.lastFrame;
-//                            NSLog(@"frame.pts:%llu", firstFrame.pts);
-//                            NSLog(@"frame.pts:%@", yuvFrame);
-//                            NSLog(@"frame.pts:%@", lastFrame);
-//                            NSLog(@"count1:%ld", (long)_yuvFrameBuffer.count);
-                            [_delegate decodeOperation:self decodeYUVFrom:firstFrame.presentTime to:lastFrame.presentTime];
+                        if (yuvFrame) {
+//                            NSLog(@"mayinglun log:v-time:%llu", yuvFrame.presentTime);
+                            [_yuvFrameBuffer push:yuvFrame];
+                            if (_delegate && [_delegate respondsToSelector:@selector(decodeOperation: decodeYUVFrom: to:)])
+                            {
+                                MAYUVFrame* firstFrame = (MAYUVFrame*)_yuvFrameBuffer.fristFrame;
+                                MAYUVFrame* lastFrame = (MAYUVFrame*)_yuvFrameBuffer.lastFrame;
+                                [_delegate decodeOperation:self decodeYUVFrom:firstFrame.presentTime to:lastFrame.presentTime];
+                            }
                         }
                         
                     }
@@ -73,13 +68,15 @@
                     for (MAFrame* frame in frames) {
                         
                         MAPCMFrame* pcmFrame = [_decoder toPCMFrameData:frame];
-                        [_pcmFrameBuffer push:pcmFrame];
-                        
-                        if (_delegate && [_delegate respondsToSelector:@selector(decodeOperation: decodeYUVFrom: to:)])
-                        {
-                            MAPCMFrame* firstFrame = (MAPCMFrame*)_pcmFrameBuffer.fristFrame;
-                            MAPCMFrame* lastFrame = (MAPCMFrame*)_pcmFrameBuffer.lastFrame;
-                            [_delegate decodeOperation:self decodePCMFrom:firstFrame.presentTime to:lastFrame.presentTime];
+                        if (pcmFrame) {
+//                            NSLog(@"mayinglun log:a-time:%llu", pcmFrame.presentTime);
+                            [_pcmFrameBuffer push:pcmFrame];
+                            if (_delegate && [_delegate respondsToSelector:@selector(decodeOperation: decodeYUVFrom: to:)])
+                            {
+                                MAPCMFrame* firstFrame = (MAPCMFrame*)_pcmFrameBuffer.fristFrame;
+                                MAPCMFrame* lastFrame = (MAPCMFrame*)_pcmFrameBuffer.lastFrame;
+                                [_delegate decodeOperation:self decodePCMFrom:firstFrame.presentTime to:lastFrame.presentTime];
+                            }
                         }
                         
                     }

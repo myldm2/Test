@@ -200,11 +200,17 @@
 //        }
 //    }
     
-    if (_audioPlayer.m_numqueued > 10 && _audioPlayer.m_numqueued < 35) {
-        return NO;
-    }else if (_audioPlayer.m_numqueued > 35){
-        return NO;
-    }
+//    if (_audioPlayer.m_numqueued > 10 && _audioPlayer.m_numqueued < 35) {
+//        return NO;
+//    }else
+
+//    MAPCMFrame* pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
+//    while (pcmFirstFrame) {
+//        pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
+//        [_audioPlayer playFrame:pcmFirstFrame];
+//        pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
+//        success = YES;
+//    }
     
     
     MAYUVFrame* yuvFirstFrame = (MAYUVFrame*)[_yuvFrameBuffer fristFrame];
@@ -226,18 +232,20 @@
         }
     }
     
+    time2 = time2 + 5 * AV_TIME_BASE;
     MAPCMFrame* pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
-    
-    while (pcmFirstFrame) {
+//
+//    while (pcmFirstFrame && [_audioPlayer m_numqueue] < 600)
+//    {
 //        MAPCMFrame* pcmFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
 //        if (pcmFrame) {
 //            [_audioPlayer playFrame:pcmFrame];
 //            pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
 //            success = YES;
-//        } else
-//        {
-//            break;
 //        }
+//    }
+
+    while (pcmFirstFrame) {
         if (pcmFirstFrame.presentTime >= time2) {
             success = YES;
             break;
@@ -249,6 +257,7 @@
             MAPCMFrame* pcmFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
             if (pcmFrame) {
                 [_audioPlayer playFrame:pcmFrame];
+                NSLog(@"mayinglun log:m_numqueued:%d", _audioPlayer.m_numqueued);
                 pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
                 success = YES;
             }
@@ -262,10 +271,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray* frames = [_decodeOperation.yuvFrameBuffer popAll];
-//        NSLog(@"count1:%ld", _frameBuffer.count);
         [_yuvFrameBuffer pushFrames:frames];
-//        NSLog(@"count2:%ld", _yuvFrameBuffer.count);
-//        NSLog(@"count2:%ld  %ld", (long)_frameBuffer.count, frames.count);
     });
 }
 
@@ -275,6 +281,20 @@
         NSArray* frames = [_decodeOperation.pcmFrameBuffer popAll];
         [_pcmFrameBuffer pushFrames:frames];
     });
+    
+//    if (_audioPlayer.m_numqueued > 10 && _audioPlayer.m_numqueued < 35) {
+//        [NSThread sleepForTimeInterval:0.01];
+//    }else if (_audioPlayer.m_numqueued > 35){
+//        [NSThread sleepForTimeInterval:0.025];
+//    }
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        MAPCMFrame* pcmFirstFrame = (MAPCMFrame*)[operation.pcmFrameBuffer fristFrame];
+//        while (pcmFirstFrame) {
+//            pcmFirstFrame = (MAPCMFrame*)[operation.pcmFrameBuffer pop];
+//            [_audioPlayer playFrame:pcmFirstFrame];
+//            pcmFirstFrame = (MAPCMFrame*)[operation.pcmFrameBuffer fristFrame];
+//        }
+//    });
 }
 
 @end

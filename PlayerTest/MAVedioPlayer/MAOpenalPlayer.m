@@ -58,6 +58,13 @@
     return ret;
 }
 
+-(int)m_numqueue
+{
+    alGetSourcei(m_outSourceId, AL_BUFFERS_PROCESSED, &_m_numprocessed);
+    alGetSourcei(m_outSourceId, AL_BUFFERS_QUEUED, &_m_numqueued);
+    return _m_numqueued - _m_numprocessed;
+}
+
 -(int)updataQueueBuffer{
     
     
@@ -68,6 +75,8 @@
     alGetSourcei(m_outSourceId, AL_BUFFERS_PROCESSED, &_m_numprocessed);
     //获取缓存队列，缓存的队列数量
     alGetSourcei(m_outSourceId, AL_BUFFERS_QUEUED, &_m_numqueued);
+    
+//    NSLog(@"mayinglun log:m_numqueued:%d", _m_numqueued);
     
     //获取播放状态，是不是正在播放
     alGetSourcei(m_outSourceId, AL_SOURCE_STATE, &stateVaue);

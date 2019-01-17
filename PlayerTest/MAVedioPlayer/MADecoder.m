@@ -190,7 +190,7 @@
             MAFrame* frame = [[MAFrame alloc] init];
             re = avcodec_receive_frame(_pAudioCodecCtx, frame.frame);
             if (re == 0) {
-                frame.presentTime = frame.frame->pts * [self r2d: _pFormatCtx->streams[_videoStreamIndex]->time_base] * AV_TIME_BASE;
+                frame.presentTime = frame.frame->pts * [self r2d: _pFormatCtx->streams[_audioStreamIndex]->time_base] * AV_TIME_BASE;
                 [frames addObject:frame];
             }
         }
@@ -288,7 +288,7 @@
     uint8_t * data[1];
     data[0] = (uint8_t*)dataBuf;
     int len = swr_convert(_pSwrCtx, data, 10000, (const uint8_t**)frame.frame->data, frame.frame->nb_samples);
-    if (len < 0) {
+    if (len <= 0) {
         free(dataBuf);
         return nil;
     } else
