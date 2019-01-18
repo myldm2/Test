@@ -141,7 +141,14 @@
     
     int ret = 0;
 
-    alSourcePlay(m_outSourceId);
+    ALint value;
+    alGetSourcei(m_outSourceId, AL_SOURCE_STATE, &value);
+    //    NSLog(@"%x",value);
+    if (value != AL_PLAYING)
+    {
+        alSourcePlay(m_outSourceId);
+    }
+//    alSourcePlay(m_outSourceId);
     if((ret = alGetError()) != AL_NO_ERROR)
     {
         printf("error alcMakeContextCurrent %x\n", ret);
