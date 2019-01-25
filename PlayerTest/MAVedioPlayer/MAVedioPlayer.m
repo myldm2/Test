@@ -21,6 +21,7 @@
 #import "MATimer.h"
 #import "MAFrameBuffer.h"
 #import "MAOpenalPlayer.h"
+#import "MAVedioPlayOperation.h"
 
 @interface MAVedioPlayer () <MATimerDelegate, MADecodeOperationDelegate>
 {
@@ -34,6 +35,9 @@
 
 @property (nonatomic, strong) MADecodeOperation* decodeOperation;
 @property (nonatomic, strong) NSOperationQueue* decodeQueue;
+
+@property (nonatomic, strong) MAVedioPlayOperation* playOperation;
+@property (nonatomic, strong) NSOperationQueue* playQueue;
 
 @property (nonatomic, strong) CADisplayLink* displayLink;
 @property (nonatomic, strong) MATimer* timer;
@@ -63,8 +67,8 @@
     if (self) {
         _lock = [[NSLock alloc] init];
         _decodeQueue = [[NSOperationQueue alloc] init];
-        _yuvFrameBuffer = [[MAFrameBuffer alloc] initWithMultithreadProtection:NO];
-        _pcmFrameBuffer = [[MAFrameBuffer alloc] initWithMultithreadProtection:NO];
+        _yuvFrameBuffer = [[MAFrameBuffer alloc] initWithMultithreadProtection:YES];
+        _pcmFrameBuffer = [[MAFrameBuffer alloc] initWithMultithreadProtection:YES];
     }
     return self;
 }
@@ -108,19 +112,21 @@
 //    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayAction:)];
 //    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
-    if (!_timer)
-    {
-        _timer = [[MATimer alloc] init];
-        _timer.delegate = self;
-    }
-    
-    
-    [_timer play];
+//    if (!_timer)
+//    {
+//        _timer = [[MATimer alloc] init];
+//        _timer.delegate = self;
+//    }
+//
+//
+//    [_timer play];
     
     
 //    [NSTimer scheduledTimerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
 //        [self startPlayThread];
 //    }];
+    
+    [self startPlayThread];
 }
 
 - (void)startDecodeQueue
@@ -140,10 +146,20 @@
 
 - (void)startPlayThread
 {
-    MAYUVFrame* yuvFrame = (MAYUVFrame*)[_decodeOperation.yuvFrameBuffer pop];
-    if (yuvFrame) {
-        [_gl displayYUV420pData:yuvFrame];
+//    MAYUVFrame* yuvFrame = (MAYUVFrame*)[_decodeOperation.yuvFrameBuffer pop];
+//    if (yuvFrame) {
+//        [_gl displayYUV420pData:yuvFrame];
+//    }
+    
+    if (!_playOperation)
+    {
+        _playOperation = [[MAVedioPlayOperation alloc] initWithYUVBuffer:_yuvFrameBuffer PCMBuffer:_pcmFrameBuffer glView:_gl alPlayer:_audioPlayer];
     }
+    if (!_playQueue)
+    {
+        _playQueue = [[NSOperationQueue alloc] init];
+    }
+    [_playQueue addOperation:_playOperation];
 }
 
 - (void)displayAction:(CADisplayLink*)displayLink
@@ -203,7 +219,7 @@
 //    if (_audioPlayer.m_numqueued > 10 && _audioPlayer.m_numqueued < 35) {
 //        return NO;
 //    }else
-
+//
 //    MAPCMFrame* pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer fristFrame];
 //    while (pcmFirstFrame) {
 //        pcmFirstFrame = (MAPCMFrame*)[_pcmFrameBuffer pop];
