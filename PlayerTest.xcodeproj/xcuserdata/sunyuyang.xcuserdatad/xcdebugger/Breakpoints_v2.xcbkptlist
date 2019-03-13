@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PlayerTest/MAVedioPlayer/MAVedioPlayer.m"
-            timestampString = "570334277.620806"
+            timestampString = "573987264.994845"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
             landmarkName = "-timerBetween:and:"
             landmarkType = "7">
          </BreakpointContent>

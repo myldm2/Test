@@ -48,6 +48,7 @@
 		B70B77F3218FE44A005A5AC4 /* MAAudioFileStream.m in Sources */ = {isa = PBXBuildFile; fileRef = B70B77F2218FE44A005A5AC4 /* MAAudioFileStream.m */; };
 		B70B77F6219017BE005A5AC4 /* MAAudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B70B77F5219017BE005A5AC4 /* MAAudioViewController.m */; };
 		B70B77F821901866005A5AC4 /* MAAudioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B70B77F721901866005A5AC4 /* MAAudioViewController.xib */; };
+		B70FADB822365295009CC2C4 /* MAPlayCore.m in Sources */ = {isa = PBXBuildFile; fileRef = B70FADB722365295009CC2C4 /* MAPlayCore.m */; };
 		B71503CD2195602700FCCAE7 /* MAAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = B71503CC2195602700FCCAE7 /* MAAudioBuffer.m */; };
 		B72CD6AB21AD2D8D00438F90 /* OpenglView.m in Sources */ = {isa = PBXBuildFile; fileRef = B72CD6AA21AD2D8D00438F90 /* OpenglView.m */; };
 		B73A48C4214B8E4E006A8EF9 /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B73A48C3214B8E4E006A8EF9 /* Decoder.m */; };
@@ -250,6 +251,8 @@
 		B70B77F4219017BE005A5AC4 /* MAAudioViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioViewController.h; sourceTree = "<group>"; };
 		B70B77F5219017BE005A5AC4 /* MAAudioViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAAudioViewController.m; sourceTree = "<group>"; };
 		B70B77F721901866005A5AC4 /* MAAudioViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MAAudioViewController.xib; sourceTree = "<group>"; };
+		B70FADB622365295009CC2C4 /* MAPlayCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAPlayCore.h; sourceTree = "<group>"; };
+		B70FADB722365295009CC2C4 /* MAPlayCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAPlayCore.m; sourceTree = "<group>"; };
 		B71503CB2195602700FCCAE7 /* MAAudioBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MAAudioBuffer.h; sourceTree = "<group>"; };
 		B71503CC2195602700FCCAE7 /* MAAudioBuffer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MAAudioBuffer.m; sourceTree = "<group>"; };
 		B72CD6A921AD2D8D00438F90 /* OpenglView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenglView.h; sourceTree = "<group>"; };
@@ -720,6 +723,8 @@
 				B78163F221D6011500EDAC94 /* MAOpenglView.m */,
 				B7540B8F21D7499A00E1DD0A /* MAFrameBuffer.h */,
 				B7540B9021D7499A00E1DD0A /* MAFrameBuffer.m */,
+				B70FADB622365295009CC2C4 /* MAPlayCore.h */,
+				B70FADB722365295009CC2C4 /* MAPlayCore.m */,
 				B7B3118921DDA05E0088C746 /* MADecodeOperation.h */,
 				B7B3118A21DDA05E0088C746 /* MADecodeOperation.m */,
 				B76DEF1F21FEAA5100C5E308 /* MAAudioPlayOperation.h */,
@@ -833,6 +838,7 @@
 				B686245F2044E64200FE7C9D /* VedioViewController.m in Sources */,
 				B79F3F4821D2006F00066098 /* MAVedioPlayerViewController.m in Sources */,
 				B68624722044EB8500FE7C9D /* MediaView.m in Sources */,
+				B70FADB822365295009CC2C4 /* MAPlayCore.m in Sources */,
 				B71503CD2195602700FCCAE7 /* MAAudioBuffer.m in Sources */,
 				B7E63E2021C7947C00F0C3C0 /* XPlayer.m in Sources */,
 				B776AEE621D37556002C6ED2 /* MAPacket.m in Sources */,

@@ -22,6 +22,8 @@
 #import "MAFrameBuffer.h"
 #import "MAOpenalPlayer.h"
 #import "MAVedioPlayOperation.h"
+#import "MAAudioPlayOperation.h"
+#import "MAPlayCore.h"
 
 @interface MAVedioPlayer () <MATimerDelegate, MADecodeOperationDelegate>
 {
@@ -36,8 +38,12 @@
 @property (nonatomic, strong) MADecodeOperation* decodeOperation;
 @property (nonatomic, strong) NSOperationQueue* decodeQueue;
 
-@property (nonatomic, strong) MAVedioPlayOperation* playOperation;
-@property (nonatomic, strong) NSOperationQueue* playQueue;
+@property (nonatomic, strong) MAVedioPlayOperation* vedioPlayOperation;
+@property (nonatomic, strong) MAAudioPlayOperation* audioPlayOperation;
+
+@property (nonatomic, strong) NSOperationQueue* vedioPlayQueue;
+@property (nonatomic, strong) NSOperationQueue* audioPlayQueue;
+@property (nonatomic, strong) MAPlayCore* playCore;
 
 @property (nonatomic, strong) CADisplayLink* displayLink;
 @property (nonatomic, strong) MATimer* timer;
@@ -77,6 +83,8 @@
 {
     int ret = 0;
     
+    
+    
     _gl = [[MAOpenglView alloc]initWithFrame:view.frame];
     if (!_gl) {
         NSLog(@"init gl fail...");
@@ -85,6 +93,12 @@
     [_gl setVideoSize:view.frame.size.width height:view.frame.size.height];
     [view addSubview:_gl];
     
+    if (!_audioPlayer)
+    {
+        _audioPlayer = [[MAOpenalPlayer alloc]init];
+        [_audioPlayer initOpenAL];
+    }
+    
      _decoder = [[MADecoder alloc] init];
     
     NSError* error;
@@ -92,6 +106,9 @@
     {
         ret = -1;
     }
+    _playCore = [[MAPlayCore alloc] init];
+    _playCore.glView = _gl;
+    _playCore.alPlayer = _audioPlayer;
     return ret;
 }
 
@@ -99,12 +116,7 @@
 {
 //    [self startPlayThread];
     
-    if (!_audioPlayer)
-    {
-        _audioPlayer = [[MAOpenalPlayer alloc]init];
-        [_audioPlayer initOpenAL];
-//        [_audioPlayer playSound];
-    }
+    
     
 
     [self startDecodeQueue];
@@ -151,15 +163,25 @@
 //        [_gl displayYUV420pData:yuvFrame];
 //    }
     
-    if (!_playOperation)
+    if (!_vedioPlayOperation)
     {
-        _playOperation = [[MAVedioPlayOperation alloc] initWithYUVBuffer:_yuvFrameBuffer PCMBuffer:_pcmFrameBuffer glView:_gl alPlayer:_audioPlayer];
+        _vedioPlayOperation = [[MAVedioPlayOperation alloc] initWithYUVBuffer:_yuvFrameBuffer playCore:_playCore];
     }
-    if (!_playQueue)
+    if (!_vedioPlayQueue)
     {
-        _playQueue = [[NSOperationQueue alloc] init];
+        _vedioPlayQueue = [[NSOperationQueue alloc] init];
     }
-    [_playQueue addOperation:_playOperation];
+    [_vedioPlayQueue addOperation:_vedioPlayOperation];
+    
+    if (!_audioPlayOperation)
+    {
+        _audioPlayOperation = [[MAAudioPlayOperation alloc] initWithPCMBuffer:_pcmFrameBuffer playCore:_playCore];
+    }
+    if (!_audioPlayQueue)
+    {
+        _audioPlayQueue = [[NSOperationQueue alloc] init];
+    }
+    [_audioPlayQueue addOperation:_audioPlayOperation];
 }
 
 - (void)displayAction:(CADisplayLink*)displayLink

@@ -10,12 +10,13 @@
 #import "MAFrameBuffer.h"
 #import "MAOpenglView.h"
 #import "MAOpenalPlayer.h"
+#import "MAPlayCore.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MAVedioPlayOperation : NSBlockOperation
 
-- (instancetype)initWithYUVBuffer:(MAFrameBuffer*)yuvBuffer PCMBuffer:(MAFrameBuffer*)pcmBuffer glView:(MAOpenglView*)glView alPlayer:(MAOpenalPlayer*)alPlayer;
+- (instancetype)initWithYUVBuffer:(MAFrameBuffer*)yuvBuffer playCore:(MAPlayCore*)playCore;
 
 @end
 
